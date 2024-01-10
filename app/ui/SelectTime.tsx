@@ -8,22 +8,36 @@ import {
 import { RadioGroup, Radio } from "@nextui-org/radio";
 import { Button } from "@nextui-org/button";
 import { Link } from "@nextui-org/link";
+import { useState } from "react";
 
 const SelectTime = ({ isOpen, onOpenChange, title }) => {
+  const [radioValue, setRadioValue] = useState("60");
+
+  const handleChange = (event) => {
+    const value = event.target.value;
+    setRadioValue(value);
+  };
+
+  console.log(radioValue);
   return (
     <>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center" size="xl" hideCloseButton>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        placement="center"
+        size="xl"
+        hideCloseButton
+      >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                {title}
-              </ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
               <ModalBody>
                 <RadioGroup
                   defaultValue="60"
                   orientation="horizontal"
                   label="请选择游戏时长"
+                  onChange={handleChange}
                 >
                   <Radio value="60">60秒</Radio>
                   <Radio value="120">120秒</Radio>
