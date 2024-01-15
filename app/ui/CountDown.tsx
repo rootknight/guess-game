@@ -9,7 +9,6 @@ function CountDown({
   onTimerEnd: () => void;
 }) {
   const [remaingTime, setRemaingTime] = useState(time);
-  const progress = (remaingTime / time) * 100;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -35,7 +34,8 @@ function CountDown({
         aria-label="倒计时"
         disableAnimation
         color="default"
-        value={progress}
+        value={remaingTime}
+        maxvalue={time}
         className="w-full p-4"
       />
       <p className="text-white text-3xl md:text-4xl">{remaingTime}</p>
