@@ -1,29 +1,89 @@
 "use client";
 
 import clsx from "clsx";
-import { Button } from "@nextui-org/button";
-import { Link } from "@nextui-org/link";
-import words from "@/app/data/words.json";
+import { useState, useEffect, useContext } from "react";
+import RandomWord from "@/app/ui/RandomWord";
 import CountDown from "@/app/ui/CountDown";
-import { useState, useEffect } from "react";
+import words from "@/app/data/words.json";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-function page() {
+function Page() {
+  const [isEventDisabled, setIsEventDisabled] = useState(false);
+  //根据当前url的type获取对应词组
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
+
+  const timeParam: string | null = searchParams.get("time");
+  const time = timeParam !== null ? parseInt(timeParam) : 60;
+
+  let selectWords: string[];
+  let title: string;
+
+  if (type === "random") {
+    selectWords = words.flatMap((obj) => obj.words);
+    title = "随机";
+  } else {
+    const foundObject = words.find((obj) => obj.type === type);
+    selectWords = foundObject?.words || [];
+    title = foundObject?.title || "";
+  }
+
+  const [localStorageData, setLocalStorageData] = useState<any[]>([]);
+  const [successWords, setSuccessWords] = useState<any[]>([]);
+  const [errorWords, setErrorWords] = useState<any[]>([]);
+
   const [backgroundColor, setBackgroundColor] = useState("bg-blue-500");
-  const [currentWord, setCurrentWord] = useState("");
+  const [correctText, setCorrectText] = useState("");
 
-  setBackgroundColor(() => {
-    const color = Math.floor(Math.random() * 4);
-    switch (color) {
-      case 0:
-        return "bg-blue-500";
-      case 1:
-        return "bg-red-500";
-      case 2:
-        return "bg-yellow-500";
-      case 3:
-        return "bg-green-500";
-    }
-  });
+  const router = useRouter();
+
+  const handleTimerEnd = () => {
+    // 获取之前的数据
+    const storedSelectedWords = localStorage.getItem("selectedWords");
+    const parsedSelectedWords =
+      storedSelectedWords !== null ? JSON.parse(storedSelectedWords) : [];
+
+    // 新的数据
+    const newData = {
+      title: title,
+      type: type,
+      time: time,
+      endTime: new Date().getTime(),
+      successWords,
+      errorWords,
+    };
+
+    // 追加新的数据
+    const updatedSelectedWords = [newData, ...parsedSelectedWords];
+    // 保存到localStorage中
+    localStorage.setItem("selectedWords", JSON.stringify(updatedSelectedWords));
+
+    router.push("/settlement");
+  };
+
+  const handleSuccess = (word: string) => {
+    setBackgroundColor("bg-green-500");
+    setCorrectText("正确");
+    setSuccessWords([...successWords, word]);
+    // 1秒后重置背景颜色为蓝色
+    setTimeout(() => {
+      setBackgroundColor("bg-blue-500");
+      setCorrectText("");
+    }, 1000);
+  };
+
+  const handleError = (word: string) => {
+    setBackgroundColor("bg-red-500");
+    setCorrectText("跳过");
+    setErrorWords([...errorWords, word]);
+    // 1秒后重置背景颜色为蓝色
+    setTimeout(() => {
+      setBackgroundColor("bg-blue-500");
+      setCorrectText("");
+    }, 1000);
+  };
 
   return (
     <div
@@ -33,24 +93,23 @@ function page() {
       )}
     >
       <div className="flex flex-col justify-top items-center">
-        <CountDown totalTime={180} />
-        <p className="text-white text-3xl md:text-4xl">180秒</p>
+        <CountDown time={time} onTimerEnd={handleTimerEnd} />
       </div>
       <div className="w-full">
-        <h1 className="text-center text-white text-6xl md:text-8xl">
-          {currentWord}
-        </h1>
+        <RandomWord
+          words={selectWords} // 你的词语数组
+          onSuccess={handleSuccess}
+          onError={handleError}
+          isEventDisabled={isEventDisabled}
+          setIsEventDisabled={setIsEventDisabled} // 传递 setIsEventDisabled 函数
+        />
+        <p className="text-white text-8xl text-center">{correctText}</p>
       </div>
-      <footer className="grid grid-cols-2 gap-4">
-        <Button as={Link} href={"/"} color="success">
-          重新选词
-        </Button>
-        <Button as={Link} href={"/settlement"} color="success">
-          结束游戏
-        </Button>
-      </footer>
+      <Link href={"/"} className="text-center text-gray-300">
+        重新选词
+      </Link>
     </div>
   );
 }
 
-export default page;
+export default Page;

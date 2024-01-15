@@ -22,6 +22,15 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", ".next/types/**/*.ts", "app/ui/TitleCard.tsx", "app/ui/SelectWords.tsx", "app/(index)/page.tsx", "app/game/page.tsx", "app/settlement/page.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    ".next/types/**/*.ts",
+    "app/ui/TitleCard.tsx",
+    "app/ui/SelectWords.tsx",
+    "app/(index)/page.tsx",
+    "app/game/page.tsx",
+    "app/settlement/page.tsx"
+  ],
   "exclude": ["node_modules"]
 }

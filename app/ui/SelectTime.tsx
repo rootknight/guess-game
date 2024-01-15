@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Modal,
   ModalContent,
@@ -7,18 +9,22 @@ import {
 } from "@nextui-org/modal";
 import { RadioGroup, Radio } from "@nextui-org/radio";
 import { Button } from "@nextui-org/button";
-import { Link } from "@nextui-org/link";
+import Link from "next/link";
 import { useState } from "react";
 
-const SelectTime = ({ isOpen, onOpenChange, title }) => {
+const SelectTime = ({
+  isOpen,
+  onOpenChange,
+  type,
+  title,
+}: {
+  isOpen: boolean;
+  onOpenChange: any;
+  type: string;
+  title: string;
+}) => {
   const [radioValue, setRadioValue] = useState("60");
 
-  const handleChange = (event) => {
-    const value = event.target.value;
-    setRadioValue(value);
-  };
-
-  console.log(radioValue);
   return (
     <>
       <Modal
@@ -34,10 +40,10 @@ const SelectTime = ({ isOpen, onOpenChange, title }) => {
               <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
               <ModalBody>
                 <RadioGroup
-                  defaultValue="60"
                   orientation="horizontal"
                   label="请选择游戏时长"
-                  onChange={handleChange}
+                  defaultValue="60"
+                  onValueChange={setRadioValue}
                 >
                   <Radio value="60">60秒</Radio>
                   <Radio value="120">120秒</Radio>
@@ -47,15 +53,19 @@ const SelectTime = ({ isOpen, onOpenChange, title }) => {
                 </RadioGroup>
               </ModalBody>
               <ModalFooter>
-                <Button
-                  as={Link}
-                  href="/game"
-                  color="primary"
-                  onPress={onClose}
-                  className="w-full"
+                <Link
+                  href={{
+                    pathname: "/game",
+                    query: {
+                      type: type,
+                      time: radioValue,
+                    },
+                  }}
                 >
-                  开始游戏
-                </Button>
+                  <Button color="primary" onClick={onClose} className="w-full">
+                    开始游戏
+                  </Button>
+                </Link>
               </ModalFooter>
             </>
           )}

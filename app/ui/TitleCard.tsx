@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 
-export default function TitleCard({ title }) {
+export default function TitleCard({ title }: { title: string }) {
   return (
     <Card
       className="w-full h-32 bg-background/60 dark:bg-default-100/50"

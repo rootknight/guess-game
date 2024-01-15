@@ -1,37 +1,45 @@
 import { Progress } from "@nextui-org/progress";
 import { useEffect, useState } from "react";
 
-function CountDown({ totalTime }) {
-  const [progress, setProgress] = useState(100);
+function CountDown({
+  time,
+  onTimerEnd,
+}: {
+  time: number;
+  onTimerEnd: () => void;
+}) {
+  const [remaingTime, setRemaingTime] = useState(time);
+  const progress = (remaingTime / time) * 100;
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setProgress((prevProgress) => {
-        // 计算进度百分比
-        const newProgress = prevProgress - 100 / totalTime;
-
-        // 判断倒计时是否结束
-        if (newProgress <= 0) {
+      setRemaingTime((prevRemaingTime: number) => {
+        if (prevRemaingTime > 0) {
+          return prevRemaingTime - 1;
+        } else {
           clearInterval(interval);
+          onTimerEnd();
+          return 0;
         }
-
-        return newProgress;
       });
     }, 1000); // 每秒更新一次
 
     // 组件卸载时清除定时器
     return () => clearInterval(interval);
-  }, [totalTime]);
+  }, [onTimerEnd]);
 
   return (
-    <Progress
-      isStriped
-      disableAnimation
-      aria-label="倒计时"
-      color="secondary"
-      value={progress}
-      className="w-full p-4"
-    />
+    <>
+      <Progress
+        isStriped
+        aria-label="倒计时"
+        disableAnimation
+        color="default"
+        value={progress}
+        className="w-full p-4"
+      />
+      <p className="text-white text-3xl md:text-4xl">{remaingTime}</p>
+    </>
   );
 }
 
