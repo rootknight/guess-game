@@ -35,7 +35,7 @@ function CountDown({
         disableAnimation
         color="default"
         value={remaingTime}
-        maxvalue={time}
+        maxValue={time}
         className="w-full p-4"
       />
       <p className="text-white text-3xl md:text-4xl">{remaingTime}</p>
