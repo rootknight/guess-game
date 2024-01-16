@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 function Page() {
-  const [isEventDisabled, setIsEventDisabled] = useState(false);
   //根据当前url的type获取对应词组
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
@@ -100,8 +99,7 @@ function Page() {
           words={selectWords} // 你的词语数组
           onSuccess={handleSuccess}
           onError={handleError}
-          isEventDisabled={isEventDisabled}
-          setIsEventDisabled={setIsEventDisabled} // 传递 setIsEventDisabled 函数
+          onEmptyWords={handleTimerEnd}
         />
         <p className="text-white text-8xl text-center">{correctText}</p>
       </div>

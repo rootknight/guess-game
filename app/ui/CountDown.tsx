@@ -25,18 +25,21 @@ function CountDown({
 
     // 组件卸载时清除定时器
     return () => clearInterval(interval);
-  }, [onTimerEnd]);
+  }, [remaingTime, onTimerEnd]);
 
   return (
     <>
       <Progress
         isStriped
         aria-label="倒计时"
-        disableAnimation
+        // disableAnimation
         color="default"
         value={remaingTime}
         maxValue={time}
-        className="w-full p-4"
+        // className="w-full p-4"
+        classNames={{
+          indicator: "transition-all duration-1000 ease-linear",
+        }}
       />
       <p className="text-white text-3xl md:text-4xl">{remaingTime}</p>
     </>

@@ -1,26 +1,45 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 const RandomWord = ({
   words,
   onSuccess,
   onError,
-  isEventDisabled, // 接收 isEventDisabled 作为 prop
-  setIsEventDisabled, // 接收 setIsEventDisabled 函数
+  onEmptyWords,
 }: {
   words: string[];
   onSuccess: any;
   onError: any;
-  isEventDisabled: any;
-  setIsEventDisabled: any;
+  onEmptyWords: any;
 }) => {
   const [selectedWord, setSelectedWord] = useState<string>("");
   const [selectedWords, setSelectedWords] = useState<any[]>([]);
+  const [lastAcceleration, setLastAcceleration] = useState({
+    x: 0,
+    y: 0,
+    z: 0,
+  });
 
+  //基于时间的节流函数
+  function useThrottle(callback: any, delay: any) {
+    const [lastTriggerTime, setLastTriggerTime] = useState(0);
+
+    const throttledCallback = (...args: any[]) => {
+      const currentTime = Date.now();
+
+      if (currentTime - lastTriggerTime >= delay) {
+        callback(...args);
+        setLastTriggerTime(currentTime);
+      }
+    };
+
+    return throttledCallback;
+  }
+
+  // 仅保存和获取过去1小时的记录以过滤后使用
   useEffect(() => {
-    // 仅保存和获取过去1小时的记录以过滤后使用
     const storedSelectedWords = localStorage.getItem("selectedWords");
     const parsedSelectedWords =
       storedSelectedWords !== null ? JSON.parse(storedSelectedWords) : [];
@@ -44,11 +63,12 @@ const RandomWord = ({
     setSelectedWords(filteredSelectedWords);
   }, []);
 
+  // 组件初始加载时立即抽取一个随机词，但不放入任何数组
   useEffect(() => {
-    // 组件初始加载时立即抽取一个随机词，但不放入任何数组
     selectRandomWord();
   }, []);
 
+  // 过滤已选词后抽词
   const selectRandomWord = () => {
     const remainingWords = words.filter(
       (word) => !selectedWords.includes(word)
@@ -59,43 +79,83 @@ const RandomWord = ({
     } else {
       // 如果所有词都已选完，可以进行一些处理，例如重新洗牌词汇数组
       console.log("egg:所有词都抽完了😎");
+      onEmptyWords();
     }
   };
 
-  // 使用 useCallback 以确保 handleKeyPress 在组件生命周期内保持一致的引用
-  const handleKeyPress = useCallback(
-    (event: any) => {
-      if (!isEventDisabled) {
-        setIsEventDisabled(true);
-        if (event.key === "ArrowDown" || event.key === "ArrowRight") {
-          onSuccess(selectedWord);
-          setTimeout(() => {
-            selectRandomWord();
-            setIsEventDisabled(false);
-          }, 1000);
-        } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
-          onError(selectedWord);
-          setTimeout(() => {
-            selectRandomWord();
-            setIsEventDisabled(false);
-          }, 1000);
-        }
-      }
-    },
-    [isEventDisabled, onSuccess, onError, selectedWord]
-  );
+  // 监听设备加速度
+  const handleMotion = (event: any) => {
+    const { acceleration } = event;
 
+    // 获取垂直方向的加速度（这里使用 y 轴的加速度）
+    const currentAcceleration = acceleration.y;
+
+    // 判断向上甩动
+    if (currentAcceleration < lastAcceleration.z) {
+      // 在这里执行向上甩动的操作
+      onSuccess(selectedWord);
+
+      // 等待一段时间后再抽取下一个词
+      setTimeout(() => {
+        selectRandomWord();
+      }, 1000);
+    }
+    // 判断向下甩动
+    else if (currentAcceleration > lastAcceleration.z) {
+      // 在这里执行向下甩动的操作
+      onError(selectedWord);
+
+      // 等待一段时间后再抽取下一个词
+      setTimeout(() => {
+        selectRandomWord();
+      }, 1000);
+    }
+
+    // 更新上一次的加速度
+    setLastAcceleration({
+      x: acceleration.x,
+      y: acceleration.y,
+      z: currentAcceleration,
+    });
+  };
+
+  // 按键动作
+  const handleKeyPress = (event: any) => {
+    if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+      onSuccess(selectedWord);
+      setTimeout(() => {
+        selectRandomWord();
+      }, 1000);
+    } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+      onError(selectedWord);
+      setTimeout(() => {
+        selectRandomWord();
+      }, 1000);
+    }
+  };
+
+  // 节流包裹动作
+  const throttledKeyPress = useThrottle(handleKeyPress, 1000);
+
+  // 添加事件监听器
   useEffect(() => {
-    // 添加事件监听器
-    document.addEventListener("keydown", handleKeyPress);
+    document.addEventListener("keydown", throttledKeyPress);
+    // 添加设备加速度事件监听器
+    window.addEventListener("devicemotion", handleMotion);
 
     // 在组件卸载时移除事件监听器，防止内存泄漏
     return () => {
-      document.removeEventListener("keydown", handleKeyPress);
+      document.removeEventListener("keydown", throttledKeyPress);
+      window.removeEventListener("devicemotion", handleMotion);
     };
-  }, [handleKeyPress]); // 空数组表示只在组件挂载和卸载时运行
+  }, [throttledKeyPress]);
 
-  return <p className="text-white text-8xl text-center">{selectedWord}</p>;
+  return (
+    <p className="text-white text-8xl text-center">
+      {selectedWord}
+      {lastAcceleration.z}
+    </p>
+  );
 };
 
 export default RandomWord;
