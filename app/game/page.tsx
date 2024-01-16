@@ -39,6 +39,10 @@ function Page() {
   const router = useRouter();
 
   const handleTimerEnd = () => {
+    // 播放gameover音效
+    const gameOverSound = new Audio("/gameover.mp3");
+    gameOverSound.play();
+
     // 获取之前的数据
     const storedSelectedWords = localStorage.getItem("selectedWords");
     const parsedSelectedWords =
@@ -63,6 +67,10 @@ function Page() {
   };
 
   const handleSuccess = (word: string) => {
+    // 播放成功音效
+    const successSound = new Audio("/success.mp3");
+    successSound.play();
+
     setBackgroundColor("bg-green-500");
     setCorrectText("正确");
     setSuccessWords([...successWords, word]);
@@ -74,6 +82,10 @@ function Page() {
   };
 
   const handleError = (word: string) => {
+    // 播放跳过音效
+    const skipSound = new Audio("/skip.mp3");
+    skipSound.play();
+
     setBackgroundColor("bg-red-500");
     setCorrectText("跳过");
     setErrorWords([...errorWords, word]);
@@ -87,7 +99,7 @@ function Page() {
   return (
     <div
       className={clsx(
-        "w-screen h-dvh flex flex-col justify-between p-4",
+        "h-dvh flex flex-col justify-between p-4 rounded-lg",
         backgroundColor
       )}
     >
@@ -101,7 +113,9 @@ function Page() {
           onError={handleError}
           onEmptyWords={handleTimerEnd}
         />
-        <p className="text-white text-8xl text-center">{correctText}</p>
+        <p className="text-white text-6xl md:text-8xl text-center">
+          {correctText}
+        </p>
       </div>
       <Link href={"/"} className="text-center text-gray-300">
         重新选词

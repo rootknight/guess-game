@@ -45,50 +45,47 @@ function Page() {
   const { successWords, errorWords, time, title, type } = latestSelectedWords;
 
   return (
-    <div className="bg-gradient-to-r from-[#FF9D6C] to-[#BB4E75]">
-      <div className="container mx-auto flex flex-col gap-2 p-4 h-dvh">
-        <TitleCard title={"游戏结束"}></TitleCard>
-        <div className="flex flex-row justify-around p-4">
-          <p>词组：{title}</p>
-          <p>游戏时长：{time}s</p>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="text-green-500">
-            <p className="py-4 bg-gray-700 rounded-t-xl text-center">
-              正确：{successWords.length}
-            </p>
-            <div className="h-[55vh] flex flex-col overflow-y-auto rounded-b-xl bg-gray-500 p-2">
-              {successWords.map((item: any, index: any) => (
-                <p key={index}>{item}</p>
-              ))}
-            </div>
-          </div>
-          <div className="text-red-500">
-            <p className="py-4 bg-gray-700 rounded-t-xl text-center">
-              跳过：{errorWords.length}
-            </p>
-            <div className="h-[55vh] flex flex-col overflow-y-auto p-2 rounded-b-xl bg-gray-500">
-              {errorWords.map((item: any, index: any) => (
-                <p key={index}>{item}</p>
-              ))}
-            </div>
+    <div className="flex flex-col gap-2 p-4">
+      <section className="flex flex-row justify-around p-4">
+        <p>词组：{title}</p>
+        <p>游戏时长：{time}s</p>
+      </section>
+      <section className="grid grid-cols-2 gap-4">
+        <div className="text-green-500">
+          <p className="py-4 bg-gray-700 rounded-t-xl text-center">
+            正确：{successWords.length}
+          </p>
+          <div className="h-[55vh] flex flex-col overflow-y-auto rounded-b-xl bg-gray-500 p-2">
+            {successWords.map((item: any, index: any) => (
+              <p key={index}>{item}</p>
+            ))}
           </div>
         </div>
-        <footer className="grid grid-cols-2 gap-4">
-          <Button onPress={onOpen} color="default">
-            再玩一局
-          </Button>
-          <Button as={Link} href={"/"} color="default">
-            返回首页
-          </Button>
-          <SelectTime
-            isOpen={isOpen}
-            onOpenChange={onOpenChange}
-            title={`再玩一局 ${title}`}
-            type={type}
-          />
-        </footer>
-      </div>
+        <div className="text-red-500">
+          <p className="py-4 bg-gray-700 rounded-t-xl text-center">
+            跳过：{errorWords.length}
+          </p>
+          <div className="h-[55vh] flex flex-col overflow-y-auto p-2 rounded-b-xl bg-gray-500">
+            {errorWords.map((item: any, index: any) => (
+              <p key={index}>{item}</p>
+            ))}
+          </div>
+        </div>
+      </section>
+      <footer className="grid grid-cols-2 gap-4">
+        <Button onPress={onOpen} color="default">
+          再玩一局
+        </Button>
+        <Button as={Link} href={"/"} color="default">
+          返回首页
+        </Button>
+        <SelectTime
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          title={`再玩一局 ${title}`}
+          type={type}
+        />
+      </footer>
     </div>
   );
 }

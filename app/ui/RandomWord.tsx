@@ -53,12 +53,6 @@ const RandomWord = ({
       return currentTime - wordTimestamp <= oneHourInMillis;
     });
 
-    // 存回localStorage
-    localStorage.setItem(
-      "selectedWords",
-      JSON.stringify(filteredSelectedWords)
-    );
-
     // 更新状态
     setSelectedWords(filteredSelectedWords);
   }, []);
@@ -87,36 +81,42 @@ const RandomWord = ({
   const handleMotion = (event: any) => {
     const { acceleration } = event;
 
-    // 获取垂直方向的加速度（这里使用 y 轴的加速度）
-    const currentAcceleration = acceleration.y;
+    // 通过积分加速度以平滑过渡
+    const smoothAcceleration = {
+      x: acceleration.x * 0.1 + lastAcceleration.x * 0.9,
+      y: acceleration.y * 0.1 + lastAcceleration.y * 0.9,
+      z: acceleration.z * 0.1 + lastAcceleration.z * 0.9,
+    };
 
-    // 判断向上甩动
-    if (currentAcceleration < lastAcceleration.z) {
-      // 在这里执行向上甩动的操作
-      onSuccess(selectedWord);
+    // 添加阈值来过滤小幅度的加速度变化
+    const threshold = 0.5; // 可根据实际情况调整阈值
 
-      // 等待一段时间后再抽取下一个词
-      setTimeout(() => {
-        selectRandomWord();
-      }, 1000);
-    }
-    // 判断向下甩动
-    else if (currentAcceleration > lastAcceleration.z) {
-      // 在这里执行向下甩动的操作
+    if (smoothAcceleration.y < -threshold) {
+      // 向上甩的动作
       onError(selectedWord);
-
-      // 等待一段时间后再抽取下一个词
       setTimeout(() => {
         selectRandomWord();
       }, 1000);
+      console.log("向上甩");
+    } else if (smoothAcceleration.y > threshold) {
+      // 向下甩的动作
+      onSuccess(selectedWord);
+      setTimeout(() => {
+        selectRandomWord();
+      }, 1000);
+      console.log("向下甩");
     }
+
+    // 缓动效果，逐渐减小加速度值
+    const dampingFactor = 0.95; // 衰减因子，可根据实际情况调整
+    const dampedAcceleration = {
+      x: smoothAcceleration.x * dampingFactor,
+      y: smoothAcceleration.y * dampingFactor,
+      z: smoothAcceleration.z * dampingFactor,
+    };
 
     // 更新上一次的加速度
-    setLastAcceleration({
-      x: acceleration.x,
-      y: acceleration.y,
-      z: currentAcceleration,
-    });
+    setLastAcceleration(dampedAcceleration);
   };
 
   // 按键动作
@@ -136,25 +136,27 @@ const RandomWord = ({
 
   // 节流包裹动作
   const throttledKeyPress = useThrottle(handleKeyPress, 1000);
+  const throttledMotion = useThrottle(handleMotion, 1000);
 
   // 添加事件监听器
   useEffect(() => {
     document.addEventListener("keydown", throttledKeyPress);
     // 添加设备加速度事件监听器
-    window.addEventListener("devicemotion", handleMotion);
+    window.addEventListener("devicemotion", throttledMotion);
 
     // 在组件卸载时移除事件监听器，防止内存泄漏
     return () => {
       document.removeEventListener("keydown", throttledKeyPress);
-      window.removeEventListener("devicemotion", handleMotion);
+      window.removeEventListener("devicemotion", throttledMotion);
     };
-  }, [throttledKeyPress]);
+  }, [throttledKeyPress, throttledMotion]);
 
   return (
-    <p className="text-white text-8xl text-center">
-      {selectedWord}
-      {lastAcceleration.z}
-    </p>
+    <>
+      <p className="text-white text-6xl md:text-8xl text-center">
+        {selectedWord}
+      </p>
+    </>
   );
 };
 
