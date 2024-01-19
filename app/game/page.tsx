@@ -1,25 +1,30 @@
 "use client";
 
-import clsx from "clsx";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import RandomWord from "@/app/ui/RandomWord";
 import CountDown from "@/app/ui/CountDown";
-import words from "@/app/data/words.json";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import words from "@/app/data/words.json";
+import MusicPlayer from "../ui/MusicPlayer";
+import clsx from "clsx";
 
 function Page() {
-  //根据当前url的type获取对应词组
+  const router = useRouter();
+  //根据当前url的time获取对应时间
   const searchParams = useSearchParams();
-  const type = searchParams.get("type");
-
+  const [successWords, setSuccessWords] = useState();
+  const [skipWords, setSkipWords] = useState();
+  const [isStartCountDown, setIsStartCountDown] = useState(false);
   const timeParam: string | null = searchParams.get("time");
   const time = timeParam !== null ? parseInt(timeParam) : 60;
 
   let selectWords: string[];
   let title: string;
 
+  //根据当前url的type获取对应词组
+  const type = searchParams.get("type");
   if (type === "random") {
     selectWords = words.flatMap((obj) => obj.words);
     title = "随机";
@@ -29,20 +34,13 @@ function Page() {
     title = foundObject?.title || "";
   }
 
-  const [localStorageData, setLocalStorageData] = useState<any[]>([]);
-  const [successWords, setSuccessWords] = useState<any[]>([]);
-  const [errorWords, setErrorWords] = useState<any[]>([]);
-
-  const [backgroundColor, setBackgroundColor] = useState("bg-blue-500");
-  const [correctText, setCorrectText] = useState("");
-
-  const router = useRouter();
-
+  //倒计时结束动作
   const handleTimerEnd = () => {
     // 播放gameover音效
     const gameOverSound = new Audio("/gameover.mp3");
     gameOverSound.play();
 
+    //将抽取过的词存入LocalStorage
     // 获取之前的数据
     const storedSelectedWords = localStorage.getItem("selectedWords");
     const parsedSelectedWords =
@@ -55,7 +53,7 @@ function Page() {
       time: time,
       endTime: new Date().getTime(),
       successWords,
-      errorWords,
+      skipWords,
     };
 
     // 追加新的数据
@@ -66,60 +64,28 @@ function Page() {
     router.push("/settlement");
   };
 
-  const handleSuccess = (word: string) => {
-    // 播放成功音效
-    const successSound = new Audio("/success.mp3");
-    successSound.play();
-
-    setBackgroundColor("bg-green-500");
-    setCorrectText("正确");
-    setSuccessWords([...successWords, word]);
-    // 1秒后重置背景颜色为蓝色
-    setTimeout(() => {
-      setBackgroundColor("bg-blue-500");
-      setCorrectText("");
-    }, 1000);
-  };
-
-  const handleError = (word: string) => {
-    // 播放跳过音效
-    const skipSound = new Audio("/skip.mp3");
-    skipSound.play();
-
-    setBackgroundColor("bg-red-500");
-    setCorrectText("跳过");
-    setErrorWords([...errorWords, word]);
-    // 1秒后重置背景颜色为蓝色
-    setTimeout(() => {
-      setBackgroundColor("bg-blue-500");
-      setCorrectText("");
-    }, 1000);
-  };
+  //强制全屏
 
   return (
-    <div
-      className={clsx(
-        "h-dvh flex flex-col justify-between p-4 rounded-lg",
-        backgroundColor
-      )}
-    >
-      <div className="flex flex-col justify-top items-center">
-        <CountDown time={time} onTimerEnd={handleTimerEnd} />
-      </div>
-      <div className="w-full">
-        <RandomWord
-          words={selectWords} // 你的词语数组
-          onSuccess={handleSuccess}
-          onError={handleError}
-          onEmptyWords={handleTimerEnd}
+    <div className="p-4 h-[100dvw] w-[100dvh] rotate-90 origin-top-left translate-x-[100dvw] md:w-dvw md:h-dvh md:rotate-0 md:translate-x-0">
+      <div className="fixed top-8 left-8 right-8 flex flex-row justify-between content-start gap-2">
+        {/* <Link href={"/"} className=" text-gray-300">
+            返回
+          </Link> */}
+        <CountDown
+          time={time}
+          isStartCountDown={isStartCountDown}
+          onTimerEnd={handleTimerEnd}
         />
-        <p className="text-white text-6xl md:text-8xl text-center">
-          {correctText}
-        </p>
+        {/* <MusicPlayer /> */}
       </div>
-      <Link href={"/"} className="text-center text-gray-300">
-        重新选词
-      </Link>
+      <RandomWord
+        words={selectWords}
+        onStartCountDown={setIsStartCountDown}
+        onSuccessWords={setSuccessWords}
+        onSkipWords={setSkipWords}
+        onEmptyWords={handleTimerEnd}
+      />
     </div>
   );
 }

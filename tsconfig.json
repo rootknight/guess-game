@@ -30,7 +30,7 @@
     "app/ui/TitleCard.tsx",
     "app/ui/MusicPlayer.tsx",
     "app/ui/SelectWords.tsx",
-    "app/(index)/page.tsx",
+    "app/(home)/page.tsx",
     "app/game/page.tsx",
     "app/settlement/page.tsx"
   ],

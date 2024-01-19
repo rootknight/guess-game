@@ -2,43 +2,70 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import clsx from "clsx";
+import { log } from "console";
 
 const RandomWord = ({
   words,
-  onSuccess,
-  onError,
+  onStartCountDown,
+  onSuccessWords,
+  onSkipWords,
   onEmptyWords,
 }: {
-  words: string[];
-  onSuccess: any;
-  onError: any;
+  words: any[];
+  onStartCountDown: any;
+  onSuccessWords: any;
+  onSkipWords: any;
   onEmptyWords: any;
 }) => {
-  const [selectedWord, setSelectedWord] = useState<string>("");
+  const [selectedWord, setSelectedWord] = useState<any>("");
   const [selectedWords, setSelectedWords] = useState<any[]>([]);
-  const [lastAcceleration, setLastAcceleration] = useState({
-    x: 0,
-    y: 0,
-    z: 0,
-  });
+  const [successWords, setSuccessWords] = useState<any[]>([]);
+  const [skipWords, setSkipWords] = useState<any[]>([]);
+  const [backgroundColor, setBackgroundColor] = useState("bg-blue-500");
+  const [displayedText, setDisplayedText] = useState<any>("");
+  const [is3secEnd, setIs3secEnd] = useState(false);
+  const [isLandscape, setIsLandscape] = useState(false);
 
-  //基于时间的节流函数
-  function useThrottle(callback: any, delay: any) {
-    const [lastTriggerTime, setLastTriggerTime] = useState(0);
+  // 初始化手机翻转动作触发标志
+  const [isForwardTriggered, setIsForwardTriggered] = useState(false);
+  const [isResetTriggered, setIsResetTriggered] = useState(true);
+  const [isBackwardTriggered, setIsBackwardTriggered] = useState(false);
 
-    const throttledCallback = (...args: any[]) => {
-      const currentTime = Date.now();
+  const handleOrientationChange = () => {
+    setIsLandscape(window.matchMedia("(orientation: landscape)").matches);
+  };
 
-      if (currentTime - lastTriggerTime >= delay) {
-        callback(...args);
-        setLastTriggerTime(currentTime);
-      }
+  //添加媒体查询监听
+  useEffect(() => {
+    // 在组件挂载时检测一次
+    handleOrientationChange();
+
+    // 监听媒体查询变化
+    const mediaQueryList = window.matchMedia("(orientation: landscape)");
+    mediaQueryList.addEventListener("change", handleOrientationChange);
+
+    // 在组件卸载时取消监听
+    return () => {
+      mediaQueryList.removeEventListener("change", handleOrientationChange);
     };
+  }, []);
 
-    return throttledCallback;
-  }
+  // 判断横屏后才开启倒计时
+  useEffect(() => {
+    if (isLandscape) {
+      if (!is3secEnd) {
+        countDown3Sec();
+      }
+    }
 
-  // 仅保存和获取过去1小时的记录以过滤后使用
+    if (!isLandscape && window.innerWidth < 640) {
+      setBackgroundColor("bg-amber-500");
+      setDisplayedText("请将手机横向放于胸前");
+    }
+  }, [isLandscape]);
+
+  // 获取过去1小时的记录以过滤后使用
   useEffect(() => {
     const storedSelectedWords = localStorage.getItem("selectedWords");
     const parsedSelectedWords =
@@ -52,112 +79,189 @@ const RandomWord = ({
       const wordTimestamp = new Date(word.timestamp).getTime();
       return currentTime - wordTimestamp <= oneHourInMillis;
     });
-
     // 更新状态
     setSelectedWords(filteredSelectedWords);
   }, []);
 
-  // 组件初始加载时立即抽取一个随机词，但不放入任何数组
-  useEffect(() => {
-    selectRandomWord();
-  }, []);
+  //3秒倒计时
+  const countDown3Sec = () => {
+    let countDown3Sec = 3;
+    const interval = setInterval(() => {
+      if (countDown3Sec > 0) {
+        const countDownSound = new Audio("/countdown.mp3");
+        countDownSound.play();
+        setDisplayedText(`准备: ${countDown3Sec}`);
+        countDown3Sec--;
+      } else {
+        clearInterval(interval);
+        const countDownEndSound = new Audio("/countdownend.mp3");
+        countDownEndSound.play();
+        setIs3secEnd(true);
+        getRandomWord();
+        onStartCountDown(true);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  };
 
-  // 过滤已选词后抽词
-  const selectRandomWord = () => {
+  // 从剩余可选词组随机抽词
+  const getRandomWord = () => {
+    setBackgroundColor("bg-blue-500");
+    const getRandomWordSound = new Audio("/getRandomWord.mp3");
+    getRandomWordSound.play();
     const remainingWords = words.filter(
       (word) => !selectedWords.includes(word)
     );
     if (remainingWords.length > 0) {
       const randomIndex = Math.floor(Math.random() * remainingWords.length);
       setSelectedWord(remainingWords[randomIndex]);
+      setDisplayedText(remainingWords[randomIndex]);
     } else {
       // 如果所有词都已选完，可以进行一些处理，例如重新洗牌词汇数组
-      console.log("egg:所有词都抽完了😎");
+      setDisplayedText("egg:所有词都抽完了😎");
       onEmptyWords();
     }
   };
 
-  // 监听设备加速度
-  const handleMotion = (event: any) => {
-    const { acceleration } = event;
-
-    // 通过积分加速度以平滑过渡
-    const smoothAcceleration = {
-      x: acceleration.x * 0.1 + lastAcceleration.x * 0.9,
-      y: acceleration.y * 0.1 + lastAcceleration.y * 0.9,
-      z: acceleration.z * 0.1 + lastAcceleration.z * 0.9,
-    };
-
-    // 添加阈值来过滤小幅度的加速度变化
-    const threshold = 0.5; // 可根据实际情况调整阈值
-
-    if (smoothAcceleration.y < -threshold) {
-      // 向上甩的动作
-      onError(selectedWord);
-      setTimeout(() => {
-        selectRandomWord();
-      }, 1000);
-      console.log("向上甩");
-    } else if (smoothAcceleration.y > threshold) {
-      // 向下甩的动作
-      onSuccess(selectedWord);
-      setTimeout(() => {
-        selectRandomWord();
-      }, 1000);
-      console.log("向下甩");
-    }
-
-    // 缓动效果，逐渐减小加速度值
-    const dampingFactor = 0.95; // 衰减因子，可根据实际情况调整
-    const dampedAcceleration = {
-      x: smoothAcceleration.x * dampingFactor,
-      y: smoothAcceleration.y * dampingFactor,
-      z: smoothAcceleration.z * dampingFactor,
-    };
-
-    // 更新上一次的加速度
-    setLastAcceleration(dampedAcceleration);
+  // 键盘按下后，1秒后重置背景颜色为蓝色并重新抽词
+  const reRandomWord = () => {
+    setTimeout(() => {
+      getRandomWord();
+    }, 1000);
   };
 
-  // 按键动作
+  const onSuccess = (word: string) => {
+    // 播放成功音效
+    const successSound = new Audio("/success.mp3");
+    successSound.play();
+    //设置背景颜色为绿色
+    setDisplayedText("正确");
+    setBackgroundColor("bg-green-500");
+    setSuccessWords([...successWords, word]);
+    onSuccessWords(successWords);
+  };
+
+  const onSkip = (word: string) => {
+    // 播放跳过音效
+    const skipSound = new Audio("/skip.mp3");
+    skipSound.play();
+    //设置背景颜色为红色
+    setDisplayedText("跳过");
+    setBackgroundColor("bg-rose-500");
+    setSkipWords([...skipWords, word]);
+    onSkipWords(skipWords);
+  };
+
+  // 键盘动作
   const handleKeyPress = (event: any) => {
     if (event.key === "ArrowDown" || event.key === "ArrowRight") {
       onSuccess(selectedWord);
-      setTimeout(() => {
-        selectRandomWord();
-      }, 1000);
+      reRandomWord();
     } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
-      onError(selectedWord);
-      setTimeout(() => {
-        selectRandomWord();
-      }, 1000);
+      onSkip(selectedWord);
+      reRandomWord();
+    }
+  };
+
+  //翻转手机动作
+  const handleOrientation = (event: any) => {
+    const gamma = Math.round(event.gamma);
+
+    // 向前翻转
+    if (!isForwardTriggered && gamma > 0 && gamma <= 45) {
+      setIsForwardTriggered(true); // 设置触发标志
+      setIsResetTriggered(false);
+      setIsBackwardTriggered(true);
+      navigator.vibrate(100); // 震动200毫秒
+      onSuccess(selectedWord);
+    }
+
+    //翻转回原位
+    if (
+      !isResetTriggered &&
+      ((gamma >= 55 && gamma <= 90) || (gamma >= -90 && gamma <= -55))
+    ) {
+      setIsForwardTriggered(false);
+      setIsResetTriggered(true); // 设置触发标志
+      setIsBackwardTriggered(false);
+      // navigator.vibrate(100);
+      getRandomWord();
+    }
+
+    // 向后翻转
+    if (!isBackwardTriggered && gamma >= -45 && gamma < 0) {
+      setIsForwardTriggered(true);
+      setIsResetTriggered(false);
+      setIsBackwardTriggered(true); // 设置触发标志
+      navigator.vibrate(100); // 震动200毫秒
+      onSkip(selectedWord);
+    }
+
+    // 向后翻转
+    if (gamma === 0) {
+      setIsForwardTriggered(true);
+      setIsResetTriggered(false);
+      setIsBackwardTriggered(true);
     }
   };
 
   // 节流包裹动作
   const throttledKeyPress = useThrottle(handleKeyPress, 1000);
-  const throttledMotion = useThrottle(handleMotion, 1000);
+  const throttledOrientation = useThrottle(handleOrientation, 10);
 
-  // 添加事件监听器
+  // 添加键盘事件监听器
   useEffect(() => {
-    document.addEventListener("keydown", throttledKeyPress);
-    // 添加设备加速度事件监听器
-    window.addEventListener("devicemotion", throttledMotion);
+    if (is3secEnd) {
+      document.body.addEventListener("keydown", throttledKeyPress);
+    }
 
     // 在组件卸载时移除事件监听器，防止内存泄漏
     return () => {
-      document.removeEventListener("keydown", throttledKeyPress);
-      window.removeEventListener("devicemotion", throttledMotion);
+      document.body.removeEventListener("keydown", throttledKeyPress);
     };
-  }, [throttledKeyPress, throttledMotion]);
+  }, [is3secEnd, throttledKeyPress]);
+
+  // 添加螺旋仪事件监听器
+  useEffect(() => {
+    if (is3secEnd && isLandscape) {
+      window.addEventListener("deviceorientation", throttledOrientation);
+    }
+    // 在组件卸载时移除事件监听器，防止内存泄漏
+    return () => {
+      window.removeEventListener("deviceorientation", throttledOrientation);
+    };
+  }, [is3secEnd, isLandscape, throttledOrientation]);
 
   return (
-    <>
+    <div
+      className={clsx(
+        "h-full w-full flex flex-col justify-center p-4 rounded-lg",
+        backgroundColor
+      )}
+    >
       <p className="text-white text-6xl md:text-8xl text-center">
-        {selectedWord}
+        {displayedText}
       </p>
-    </>
+    </div>
   );
 };
+
+//基于时间的节流函数
+function useThrottle(callback: any, delay: any) {
+  const [lastTriggerTime, setLastTriggerTime] = useState(0);
+
+  const throttledCallback = (...args: any[]) => {
+    const currentTime = Date.now();
+
+    if (currentTime - lastTriggerTime >= delay) {
+      callback(...args);
+      setLastTriggerTime(currentTime);
+    }
+  };
+
+  return throttledCallback;
+}
 
 export default RandomWord;

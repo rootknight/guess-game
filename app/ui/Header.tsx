@@ -1,14 +1,12 @@
-import { Card, CardBody } from "@nextui-org/card";
+"use client";
 import MusicPlayer from "@/app/ui/MusicPlayer";
 
-const Header = () => {
+const Header = ({ title }: { title: string }) => {
   return (
-    <Card isBlurred>
-      <CardBody className="flex flex-row justify-between align-middle">
-        <h1 className="align-middle text-2xl">你比我猜</h1>
-        <MusicPlayer />
-      </CardBody>
-    </Card>
+    <div className="flex flex-row justify-between align-middle bg-white rounded-lg p-4 shadow-lg">
+      <h1 className="align-middle text-2xl">{title}</h1>
+      <MusicPlayer />
+    </div>
   );
 };
 

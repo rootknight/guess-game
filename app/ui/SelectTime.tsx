@@ -62,9 +62,9 @@ const SelectTime = ({
                     },
                   }}
                 >
-                  <Button color="primary" onClick={onClose} className="w-full">
-                    开始游戏
-                  </Button>
+                  {/* <Button color="primary" className="w-full"> */}
+                  开始游戏
+                  {/* </Button> */}
                 </Link>
               </ModalFooter>
             </>
