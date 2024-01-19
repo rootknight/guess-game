@@ -40,7 +40,7 @@ function Page() {
     latestSelectedWords || {};
 
   return (
-    <div className="w-sreen h-screen p-4 flex flex-col gap-2">
+    <div className="w-sreen h-dvh p-4 flex flex-col gap-2">
       <Header title="游戏结束" />
       <section className="flex flex-row justify-around">
         <p>词组：{title}</p>
