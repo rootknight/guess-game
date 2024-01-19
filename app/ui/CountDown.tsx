@@ -29,16 +29,18 @@ function CountDown({
         });
       }, 1000); // 每秒更新一次
 
-      if (remaingTime <= 10) {
-        const countDownSound = new Audio("/countdown.mp3");
-        countDownSound.play();
-        console.log("响了");
-      }
-
       // 组件卸载时清除定时器
       return () => clearInterval(interval);
     }
   }, [isStartCountDown, onTimerEnd]);
+
+  useEffect(() => {
+    if (remaingTime <= 10) {
+      const countDownSound = new Audio("/countdown.mp3");
+      countDownSound.play();
+      console.log("响了");
+    }
+  }, [remaingTime]);
 
   // 添加条件渲染
   if (!isStartCountDown) {
@@ -59,7 +61,9 @@ function CountDown({
           indicator: "transition-all duration-1000 ease-linear",
         }}
       />
-      <p className="text-white text-3xl md:text-4xl">{remaingTime}</p>
+      <p className="text-white text-3xl md:text-4xl">
+        {remaingTime === 0 ? "时间到啦!" : remaingTime}
+      </p>
     </div>
   );
 }
