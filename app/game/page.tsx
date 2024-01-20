@@ -5,17 +5,15 @@ import RandomWord from "@/app/ui/RandomWord";
 import CountDown from "@/app/ui/CountDown";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import words from "@/app/data/words.json";
-import MusicPlayer from "../ui/MusicPlayer";
-import clsx from "clsx";
+import Image from "next/image";
 
 function Page() {
   const router = useRouter();
   //根据当前url的time获取对应时间
   const searchParams = useSearchParams();
-  const [successWords, setSuccessWords] = useState();
-  const [skipWords, setSkipWords] = useState();
+  const [successWords, setSuccessWords] = useState<string[]>([]);
+  const [skipWords, setSkipWords] = useState<string[]>([]);
   const [isStartCountDown, setIsStartCountDown] = useState(false);
   const timeParam: string | null = searchParams.get("time");
   const time = timeParam !== null ? parseInt(timeParam) : 60;
@@ -88,6 +86,40 @@ function Page() {
           onTimerEnd={handleTimerEnd}
         />
         {/* <MusicPlayer /> */}
+      </div>
+      <div className="fixed left-8 bottom-8 flex flex-col items-center gap-2">
+        <p className="text-white text-4xl">跳过 {skipWords.length}</p>
+        <Image
+          src="/arrowSkip.png"
+          width={128}
+          height={64}
+          alt="skip"
+          className="opacity-30 hidden md:block"
+        />
+        <Image
+          src="/phoneSkip.png"
+          width={128}
+          height={64}
+          alt="skip"
+          className="opacity-30 md:hidden"
+        />
+      </div>
+      <div className="fixed right-8 bottom-8 flex flex-col items-center gap-2">
+        <p className="text-white text-4xl">成功 {successWords.length}</p>
+        <Image
+          src="/arrowSuccess.png"
+          width={128}
+          height={64}
+          alt="skip"
+          className="opacity-30 hidden md:block"
+        />
+        <Image
+          src="/phoneSuccess.png"
+          width={128}
+          height={64}
+          alt="skip"
+          className="opacity-30 md:hidden"
+        />
       </div>
       <RandomWord
         words={selectWords}

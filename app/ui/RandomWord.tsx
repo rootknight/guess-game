@@ -3,7 +3,6 @@
 
 import { useState, useEffect } from "react";
 import clsx from "clsx";
-import { log } from "console";
 
 const RandomWord = ({
   words,
@@ -64,7 +63,7 @@ const RandomWord = ({
       return currentTime - wordTimestamp <= oneHourInMillis;
     });
     // 更新状态
-    setSelectedWords(filteredSelectedWords);
+    setSelectedWords(() => filteredSelectedWords);
   }, []);
 
   //3秒倒计时
@@ -80,6 +79,7 @@ const RandomWord = ({
         clearInterval(interval);
         const countDownEndSound = new Audio("/countdownend.mp3");
         countDownEndSound.play();
+        navigator.vibrate(100); // 震动100毫秒
         setIs3secEnd(true);
         getRandomWord();
         onStartCountDown(true);
@@ -123,8 +123,8 @@ const RandomWord = ({
     //设置背景颜色为绿色
     setDisplayedText("正确");
     setBackgroundColor("bg-green-500");
-    setSuccessWords([...successWords, word]);
-    onSuccessWords(successWords);
+    setSuccessWords((prevSuccessWords) => [...prevSuccessWords, word]);
+    onSuccessWords((prevSuccessWords: any) => [...prevSuccessWords, word]);
   };
 
   const onSkip = (word: string) => {
@@ -134,8 +134,8 @@ const RandomWord = ({
     //设置背景颜色为红色
     setDisplayedText("跳过");
     setBackgroundColor("bg-rose-500");
-    setSkipWords([...skipWords, word]);
-    onSkipWords(skipWords);
+    setSkipWords((prevSkipWords) => [...prevSkipWords, word]);
+    onSkipWords((prevSkipWords: any) => [...prevSkipWords, word]);
   };
 
   // 键盘动作

@@ -14,8 +14,8 @@ function CountDown({
 }) {
   const [remaingTime, setRemaingTime] = useState(time);
 
+  // 只有当 isStartCountDown 为 true 时才开始倒计时
   useEffect(() => {
-    // 添加条件判断，只有当 isStartCountDown 为 true 时才开始倒计时
     if (isStartCountDown) {
       const interval = setInterval(() => {
         setRemaingTime((prevRemaingTime: number) => {
@@ -32,8 +32,9 @@ function CountDown({
       // 组件卸载时清除定时器
       return () => clearInterval(interval);
     }
-  }, [isStartCountDown, onTimerEnd]);
+  }, [isStartCountDown]);
 
+  // 最后10秒倒计时
   useEffect(() => {
     if (remaingTime <= 10) {
       const countDownSound = new Audio("/countdown.mp3");
@@ -42,7 +43,7 @@ function CountDown({
     }
   }, [remaingTime]);
 
-  // 添加条件渲染
+  // 只有当 isStartCountDown 为 true 时才渲染组件
   if (!isStartCountDown) {
     return null;
   }

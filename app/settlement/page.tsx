@@ -40,15 +40,18 @@ function Page() {
     latestSelectedWords || {};
 
   return (
-    <div className="w-sreen h-dvh p-4 flex flex-col gap-2">
-      <Header title="游戏结束" />
-      <section className="flex flex-row justify-around">
-        <p>词组：{title}</p>
-        <p>游戏时长：{time}s</p>
+    <div className="w-sreen h-dvh p-4 flex flex-col gap-2 relative">
+      <Header title={`游戏结束`} />
+      <section className="w-48 h-48 rounded-full border-dashed border-4 border-yellow-500 absolute left-1/2 -translate-x-24 top-24 bg-white shadow-lg flex flex-col justify-center items-center gap-2">
+        <p className="text-4xl text-orange-500">
+          得分: {successWords?.length || 0}
+        </p>
+        <p className="text-xl">词组：{title}</p>
+        <p className="text-xl">时长：{time}s</p>
       </section>
-      <section className="grid grid-cols-2 gap-2">
+      <section className="grid grid-cols-2 gap-2 mt-20">
         <div className="text-green-500">
-          <p className="py-4 bg-gray-700 rounded-t-xl text-center">
+          <p className="py-4 bg-gray-700 rounded-t-xl text-center text-xl">
             正确：{successWords?.length || 0}
           </p>
           <div className="h-[55vh] flex flex-col overflow-y-auto rounded-b-xl bg-gray-500 p-2">
@@ -58,7 +61,7 @@ function Page() {
           </div>
         </div>
         <div className="text-red-500">
-          <p className="py-4 bg-gray-700 rounded-t-xl text-center">
+          <p className="py-4 bg-gray-700 rounded-t-xl text-center text-xl">
             跳过：{skipWords?.length || 0}
           </p>
           <div className="h-[55vh] flex flex-col overflow-y-auto p-2 rounded-b-xl bg-gray-500">
