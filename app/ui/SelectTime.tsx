@@ -25,6 +25,19 @@ const SelectTime = ({
 }) => {
   const [radioValue, setRadioValue] = useState("60");
 
+  const enterFullscreen = () => {
+    const element = document.documentElement;
+
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+    }
+  };
+
+  const handleStartGame = () => {
+    // 进入全屏
+    enterFullscreen();
+  };
+
   return (
     <>
       <Modal
@@ -62,9 +75,7 @@ const SelectTime = ({
                     },
                   }}
                 >
-                  {/* <Button color="primary" className="w-full"> */}
-                  开始游戏
-                  {/* </Button> */}
+                  <button onClick={handleStartGame}>开始游戏</button>
                 </Link>
               </ModalFooter>
             </>

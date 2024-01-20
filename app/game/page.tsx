@@ -34,6 +34,16 @@ function Page() {
     title = foundObject?.title || "";
   }
 
+  //退出全屏
+  const exitFullscreen = () => {
+    if (document.fullscreenElement) {
+      // 检查当前是否处于全屏状态
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
+
   //倒计时结束动作
   const handleTimerEnd = () => {
     // 播放gameover音效
@@ -60,7 +70,7 @@ function Page() {
     const updatedSelectedWords = [newData, ...parsedSelectedWords];
     // 保存到localStorage中
     localStorage.setItem("selectedWords", JSON.stringify(updatedSelectedWords));
-
+    exitFullscreen();
     router.push("/settlement");
   };
 

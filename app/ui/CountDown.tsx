@@ -38,7 +38,7 @@ function CountDown({
     if (remaingTime <= 10) {
       const countDownSound = new Audio("/countdown.mp3");
       countDownSound.play();
-      console.log("响了");
+      navigator.vibrate(100); // 震动100毫秒
     }
   }, [remaingTime]);
 
@@ -61,7 +61,7 @@ function CountDown({
           indicator: "transition-all duration-1000 ease-linear",
         }}
       />
-      <p className="text-white text-3xl md:text-4xl">
+      <p className="text-white text-2xl md:text-3xl lg:text-4xl">
         {remaingTime === 0 ? "时间到啦!" : remaingTime}
       </p>
     </div>

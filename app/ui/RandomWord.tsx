@@ -25,45 +25,29 @@ const RandomWord = ({
   const [backgroundColor, setBackgroundColor] = useState("bg-blue-500");
   const [displayedText, setDisplayedText] = useState<any>("");
   const [is3secEnd, setIs3secEnd] = useState(false);
-  const [isLandscape, setIsLandscape] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   // 初始化手机翻转动作触发标志
   const [isForwardTriggered, setIsForwardTriggered] = useState(false);
   const [isResetTriggered, setIsResetTriggered] = useState(true);
   const [isBackwardTriggered, setIsBackwardTriggered] = useState(false);
 
-  const handleOrientationChange = () => {
-    setIsLandscape(window.matchMedia("(orientation: landscape)").matches);
-  };
-
-  //添加媒体查询监听
-  useEffect(() => {
-    // 在组件挂载时检测一次
-    handleOrientationChange();
-
-    // 监听媒体查询变化
-    const mediaQueryList = window.matchMedia("(orientation: landscape)");
-    mediaQueryList.addEventListener("change", handleOrientationChange);
-
-    // 在组件卸载时取消监听
-    return () => {
-      mediaQueryList.removeEventListener("change", handleOrientationChange);
-    };
-  }, []);
-
   // 判断横屏后才开启倒计时
   useEffect(() => {
-    if (isLandscape) {
-      if (!is3secEnd) {
-        countDown3Sec();
-      }
+    if (!isReady && window.innerWidth >= 640) {
+      setIsReady(true);
+      countDown3Sec();
     }
 
-    if (!isLandscape && window.innerWidth < 640) {
+    if (!isReady && window.innerWidth < 640) {
       setBackgroundColor("bg-amber-500");
-      setDisplayedText("请将手机横向放于胸前");
+      setDisplayedText("屏幕朝向队友");
+      setTimeout(() => {
+        setIsReady(true);
+        countDown3Sec();
+      }, 3000);
     }
-  }, [isLandscape]);
+  }, [isReady]);
 
   // 获取过去1小时的记录以过滤后使用
   useEffect(() => {
@@ -225,14 +209,14 @@ const RandomWord = ({
 
   // 添加螺旋仪事件监听器
   useEffect(() => {
-    if (is3secEnd && isLandscape) {
+    if (is3secEnd && isReady) {
       window.addEventListener("deviceorientation", throttledOrientation);
     }
     // 在组件卸载时移除事件监听器，防止内存泄漏
     return () => {
       window.removeEventListener("deviceorientation", throttledOrientation);
     };
-  }, [is3secEnd, isLandscape, throttledOrientation]);
+  }, [is3secEnd, isReady, throttledOrientation]);
 
   return (
     <div
