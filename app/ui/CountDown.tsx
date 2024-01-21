@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Progress } from "@nextui-org/progress";
 import { useEffect, useState } from "react";
-import clsx from "clsx";
+import useCountdown from "@/app/hooks/useCountdown";
 
 function CountDown({
   time,
@@ -12,38 +12,19 @@ function CountDown({
   isStartCountDown: boolean;
   onTimerEnd: any;
 }) {
-  const [remaingTime, setRemaingTime] = useState(time);
+  const [count, isEnd] = useCountdown(time, isStartCountDown);
 
-  // 只有当 isStartCountDown 为 true 时才开始倒计时
   useEffect(() => {
-    if (isStartCountDown) {
-      const interval = setInterval(() => {
-        setRemaingTime((prevRemaingTime: number) => {
-          if (prevRemaingTime > 0) {
-            return prevRemaingTime - 1;
-          } else {
-            clearInterval(interval);
-            onTimerEnd();
-            return 0;
-          }
-        });
-      }, 1000); // 每秒更新一次
-
-      // 组件卸载时清除定时器
-      return () => clearInterval(interval);
-    }
-  }, [isStartCountDown]);
-
-  // 最后10秒倒计时
-  useEffect(() => {
-    if (remaingTime <= 10) {
+    if (count <= 10) {
       const countDownSound = new Audio("/countdown.mp3");
       countDownSound.play();
       navigator.vibrate(100); // 震动100毫秒
     }
-  }, [remaingTime]);
+    if (isEnd) {
+      onTimerEnd();
+    }
+  }, [count, isEnd]);
 
-  // 只有当 isStartCountDown 为 true 时才渲染组件
   if (!isStartCountDown) {
     return null;
   }
@@ -55,7 +36,7 @@ function CountDown({
         aria-label="倒计时"
         // disableAnimation
         color="default"
-        value={remaingTime}
+        value={count}
         maxValue={time}
         // className="w-full p-4"
         classNames={{
@@ -63,7 +44,7 @@ function CountDown({
         }}
       />
       <p className="text-white text-2xl md:text-3xl lg:text-4xl">
-        {remaingTime === 0 ? "时间到啦!" : remaingTime}
+        {isEnd ? "时间到啦!" : count}
       </p>
     </div>
   );

@@ -41,37 +41,37 @@ function Page() {
 
   return (
     <div className="w-sreen h-dvh p-4 flex flex-col gap-2 relative">
-      <Header title={`游戏结束`} />
-      <section className="w-48 h-48 rounded-full border-dashed border-4 border-yellow-500 absolute left-1/2 -translate-x-24 top-24 bg-white shadow-lg flex flex-col justify-center items-center gap-2">
-        <p className="text-4xl text-orange-500">
+      {/* <Header title={`游戏结束`} /> */}
+      <section className=" w-28 h-28 -translate-x-14 top-4 md:w-48 md:h-48 md:top-4 rounded-full border-dashed border-4 border-yellow-500 absolute left-1/2 md:-translate-x-24 bg-white shadow-lg flex flex-col justify-center items-center md:gap-2">
+        <p className="text-xl md:text-4xl text-orange-500">
           得分: {successWords?.length || 0}
         </p>
-        <p className="text-xl">词组：{title}</p>
-        <p className="text-xl">时长：{time}s</p>
+        <p className=" text-sm text-gray-500 md:text-xl">词组：{title}</p>
+        <p className="text-sm text-gray-500 md:text-xl">时长：{time}s</p>
       </section>
-      <section className="grid grid-cols-2 gap-2 mt-20">
-        <div className="text-green-500">
-          <p className="py-4 bg-gray-700 rounded-t-xl text-center text-xl">
+      <section className="h-full grid grid-cols-2 gap-2 mt-20 md:mt-28 text-xl">
+        <div className="text-green-500 flex flex-col flex-grow">
+          <p className="py-4 bg-gray-700 rounded-t-xl text-center">
             正确：{successWords?.length || 0}
           </p>
-          <div className="h-[55vh] flex flex-col overflow-y-auto rounded-b-xl bg-gray-500 p-2">
+          <div className="flex flex-col items-center flex-grow overflow-y-auto p-4 rounded-b-xl bg-gray-500">
             {successWords?.map((item: any, index: any) => (
               <p key={index}>{item}</p>
             ))}
           </div>
         </div>
-        <div className="text-red-500">
+        <div className="text-red-500 flex flex-col flex-grow">
           <p className="py-4 bg-gray-700 rounded-t-xl text-center text-xl">
             跳过：{skipWords?.length || 0}
           </p>
-          <div className="h-[55vh] flex flex-col overflow-y-auto p-2 rounded-b-xl bg-gray-500">
+          <div className="flex flex-col items-center flex-grow overflow-y-auto p-4 rounded-b-xl bg-gray-500">
             {skipWords?.map((item: any, index: any) => (
               <p key={index}>{item}</p>
             ))}
           </div>
         </div>
       </section>
-      <footer className="grid grid-cols-2 gap-4">
+      <footer className="grid grid-cols-2 gap-4 ">
         <Button onPress={onOpen} color="default">
           再玩一局
         </Button>

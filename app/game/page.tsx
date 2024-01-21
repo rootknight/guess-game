@@ -48,6 +48,8 @@ function Page() {
     const gameOverSound = new Audio("/gameover.mp3");
     gameOverSound.play();
 
+    exitFullscreen();
+
     //将抽取过的词存入LocalStorage
     // 获取之前的数据
     const storedSelectedWords = localStorage.getItem("selectedWords");
@@ -68,7 +70,6 @@ function Page() {
     const updatedSelectedWords = [newData, ...parsedSelectedWords];
     // 保存到localStorage中
     localStorage.setItem("selectedWords", JSON.stringify(updatedSelectedWords));
-    exitFullscreen();
     router.push("/settlement");
   };
 

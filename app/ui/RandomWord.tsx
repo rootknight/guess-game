@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
+import useThrottle from "@/app/hooks/useThrottle";
+import useCountdown from "@/app/hooks/useCountdown";
 
 const RandomWord = ({
   words,
@@ -17,78 +19,57 @@ const RandomWord = ({
   onSkipWords: any;
   onEmptyWords: any;
 }) => {
-  const [selectedWord, setSelectedWord] = useState<any>("");
-  const [selectedWords, setSelectedWords] = useState<any[]>([]);
-  const [successWords, setSuccessWords] = useState<any[]>([]);
-  const [skipWords, setSkipWords] = useState<any[]>([]);
   const [backgroundColor, setBackgroundColor] = useState("bg-blue-500");
   const [displayedText, setDisplayedText] = useState<any>("");
-  const [is3secEnd, setIs3secEnd] = useState(false);
-  const [isReady, setIsReady] = useState(false);
 
-  // 初始化手机翻转动作触发标志
-  const [isForwardTriggered, setIsForwardTriggered] = useState(false);
-  const [isResetTriggered, setIsResetTriggered] = useState(true);
-  const [isBackwardTriggered, setIsBackwardTriggered] = useState(false);
+  let extractedWord = useRef<string>("");
+  let successWords = useRef<string[]>([]);
+  let skipWords = useRef<string[]>([]);
+  let extractedWords = useRef<string[]>([]);
 
-  // 判断横屏后才开启倒计时
+  const [readyCount, isReadyEnd] = useCountdown(6, true);
+
+  //准备6秒
   useEffect(() => {
-    if (!isReady && window.innerWidth >= 640) {
-      setIsReady(true);
-      countDown3Sec();
-    }
-
-    if (!isReady && window.innerWidth < 640) {
+    if (!isReadyEnd) {
       setBackgroundColor("bg-amber-500");
-      setDisplayedText("屏幕朝向队友");
-      setTimeout(() => {
-        setIsReady(true);
-        countDown3Sec();
-      }, 3000);
+      if (readyCount >= 4) {
+        if (window.innerWidth >= 640) {
+          setDisplayedText("猜词者背对屏幕");
+        } else if (window.innerWidth < 640) {
+          setDisplayedText("横向举起屏幕");
+        }
+      } else {
+        const countDownSound = new Audio("/countdown.mp3");
+        countDownSound.play();
+        setDisplayedText(`准备: ${readyCount}`);
+      }
+    } else {
+      const countDownEndSound = new Audio("/countdownend.mp3");
+      countDownEndSound.play();
+      navigator.vibrate(100); // 震动100毫秒
+      getRandomWord();
+      onStartCountDown(true);
     }
-  }, [isReady]);
+  }, [readyCount, isReadyEnd]);
 
   // 获取过去1小时的记录以过滤后使用
   useEffect(() => {
-    const storedSelectedWords = localStorage.getItem("selectedWords");
-    const parsedSelectedWords =
-      storedSelectedWords !== null ? JSON.parse(storedSelectedWords) : [];
+    const storedextractedWords = localStorage.getItem("extractedWords");
+    const parsedextractedWords =
+      storedextractedWords !== null ? JSON.parse(storedextractedWords) : [];
 
     const currentTime = new Date().getTime();
     const oneHourInMillis = 60 * 60 * 1000; // 1小时的毫秒数
 
     // 过滤出过去1小时内的数据
-    const filteredSelectedWords = parsedSelectedWords.filter((word: any) => {
+    const filteredextractedWords = parsedextractedWords.filter((word: any) => {
       const wordTimestamp = new Date(word.timestamp).getTime();
       return currentTime - wordTimestamp <= oneHourInMillis;
     });
     // 更新状态
-    setSelectedWords(() => filteredSelectedWords);
+    extractedWords.current = filteredextractedWords;
   }, []);
-
-  //3秒倒计时
-  const countDown3Sec = () => {
-    let countDown3Sec = 3;
-    const interval = setInterval(() => {
-      if (countDown3Sec > 0) {
-        const countDownSound = new Audio("/countdown.mp3");
-        countDownSound.play();
-        setDisplayedText(`准备: ${countDown3Sec}`);
-        countDown3Sec--;
-      } else {
-        clearInterval(interval);
-        const countDownEndSound = new Audio("/countdownend.mp3");
-        countDownEndSound.play();
-        navigator.vibrate(100); // 震动100毫秒
-        setIs3secEnd(true);
-        getRandomWord();
-        onStartCountDown(true);
-      }
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  };
 
   // 从剩余可选词组随机抽词
   const getRandomWord = () => {
@@ -96,11 +77,11 @@ const RandomWord = ({
     const getRandomWordSound = new Audio("/getRandomWord.mp3");
     getRandomWordSound.play();
     const remainingWords = words.filter(
-      (word) => !selectedWords.includes(word)
+      (word) => !extractedWords.current.includes(word)
     );
     if (remainingWords.length > 0) {
       const randomIndex = Math.floor(Math.random() * remainingWords.length);
-      setSelectedWord(remainingWords[randomIndex]);
+      extractedWord.current = remainingWords[randomIndex];
       setDisplayedText(remainingWords[randomIndex]);
     } else {
       // 如果所有词都已选完，可以进行一些处理，例如重新洗牌词汇数组
@@ -123,8 +104,9 @@ const RandomWord = ({
     //设置背景颜色为绿色
     setDisplayedText("正确");
     setBackgroundColor("bg-green-500");
-    setSuccessWords((prevSuccessWords) => [...prevSuccessWords, word]);
-    onSuccessWords((prevSuccessWords: any) => [...prevSuccessWords, word]);
+    successWords.current = [...successWords.current, word];
+    onSuccessWords(successWords.current);
+    // console.log(successWords.current);
   };
 
   const onSkip = (word: string) => {
@@ -134,60 +116,65 @@ const RandomWord = ({
     //设置背景颜色为红色
     setDisplayedText("跳过");
     setBackgroundColor("bg-rose-500");
-    setSkipWords((prevSkipWords) => [...prevSkipWords, word]);
-    onSkipWords((prevSkipWords: any) => [...prevSkipWords, word]);
+    skipWords.current = [...skipWords.current, word];
+    onSkipWords(skipWords.current);
+    // console.log(skipWords.current);
   };
 
   // 键盘动作
   const handleKeyPress = (event: any) => {
     if (event.key === "ArrowDown" || event.key === "ArrowRight") {
-      onSuccess(selectedWord);
+      onSuccess(extractedWord.current);
       reRandomWord();
     } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
-      onSkip(selectedWord);
+      onSkip(extractedWord.current);
       reRandomWord();
     }
   };
+
+  let isForward = useRef<boolean>(true);
+  let isReset = useRef<boolean>(true);
+  let isBackward = useRef<boolean>(true);
 
   //翻转手机动作
   const handleOrientation = (event: any) => {
     const gamma = Math.round(event.gamma);
 
     // 向前翻转
-    if (!isForwardTriggered && gamma > 0 && gamma <= 45) {
-      setIsForwardTriggered(true); // 设置触发标志
-      setIsResetTriggered(false);
-      setIsBackwardTriggered(true);
+    if (!isForward.current && gamma > 0 && gamma <= 45) {
+      isForward.current = true;
+      isReset.current = false;
+      isBackward.current = true;
       navigator.vibrate(100); // 震动200毫秒
-      onSuccess(selectedWord);
+      onSuccess(extractedWord.current);
     }
 
     //翻转回原位
     if (
-      !isResetTriggered &&
+      !isReset.current &&
       ((gamma >= 55 && gamma <= 90) || (gamma >= -90 && gamma <= -55))
     ) {
-      setIsForwardTriggered(false);
-      setIsResetTriggered(true); // 设置触发标志
-      setIsBackwardTriggered(false);
+      isForward.current = true;
+      isReset.current = false;
+      isBackward.current = true;
       // navigator.vibrate(100);
       getRandomWord();
     }
 
     // 向后翻转
-    if (!isBackwardTriggered && gamma >= -45 && gamma < 0) {
-      setIsForwardTriggered(true);
-      setIsResetTriggered(false);
-      setIsBackwardTriggered(true); // 设置触发标志
+    if (!isBackward.current && gamma >= -45 && gamma < 0) {
+      isForward.current = true;
+      isReset.current = false;
+      isBackward.current = true;
       navigator.vibrate(100); // 震动200毫秒
-      onSkip(selectedWord);
+      onSkip(extractedWord.current);
     }
 
-    // 向后翻转
+    // 处理角度0
     if (gamma === 0) {
-      setIsForwardTriggered(true);
-      setIsResetTriggered(false);
-      setIsBackwardTriggered(true);
+      isForward.current = true;
+      isReset.current = false;
+      isBackward.current = true;
     }
   };
 
@@ -197,7 +184,7 @@ const RandomWord = ({
 
   // 添加键盘事件监听器
   useEffect(() => {
-    if (is3secEnd) {
+    if (isReadyEnd) {
       document.body.addEventListener("keydown", throttledKeyPress);
     }
 
@@ -205,18 +192,18 @@ const RandomWord = ({
     return () => {
       document.body.removeEventListener("keydown", throttledKeyPress);
     };
-  }, [is3secEnd, throttledKeyPress]);
+  }, [isReadyEnd, throttledKeyPress]);
 
   // 添加螺旋仪事件监听器
   useEffect(() => {
-    if (is3secEnd && isReady) {
+    if (isReadyEnd) {
       window.addEventListener("deviceorientation", throttledOrientation);
     }
     // 在组件卸载时移除事件监听器，防止内存泄漏
     return () => {
       window.removeEventListener("deviceorientation", throttledOrientation);
     };
-  }, [is3secEnd, isReady, throttledOrientation]);
+  }, [isReadyEnd, throttledOrientation]);
 
   return (
     <div
@@ -231,21 +218,5 @@ const RandomWord = ({
     </div>
   );
 };
-
-//基于时间的节流函数
-function useThrottle(callback: any, delay: any) {
-  const [lastTriggerTime, setLastTriggerTime] = useState(0);
-
-  const throttledCallback = (...args: any[]) => {
-    const currentTime = Date.now();
-
-    if (currentTime - lastTriggerTime >= delay) {
-      callback(...args);
-      setLastTriggerTime(currentTime);
-    }
-  };
-
-  return throttledCallback;
-}
 
 export default RandomWord;
