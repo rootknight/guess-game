@@ -2,30 +2,37 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import useThrottle from "@/app/hooks/useThrottle";
 import useCountdown from "@/app/hooks/useCountdown";
+import ScoreBoard from "@/app/ui/ScoreBoard";
 
 const RandomWord = ({
-  words,
+  type,
+  title,
+  selectedWord,
+  time,
   onStartCountDown,
-  onSuccessWords,
-  onSkipWords,
-  onEmptyWords,
+  isEnd,
 }: {
-  words: any[];
+  type: string;
+  title: string;
+  selectedWord: string[];
+  time: number;
   onStartCountDown: any;
-  onSuccessWords: any;
-  onSkipWords: any;
-  onEmptyWords: any;
+  isEnd: boolean;
 }) => {
   const [backgroundColor, setBackgroundColor] = useState("bg-blue-500");
   const [displayedText, setDisplayedText] = useState<any>("");
+  const router = useRouter();
 
   let extractedWord = useRef<string>("");
   let successWords = useRef<string[]>([]);
   let skipWords = useRef<string[]>([]);
   let extractedWords = useRef<string[]>([]);
+
+  const [isExtractedOver, setIsExtractedOver] = useState<boolean>(false);
 
   const [readyCount, isReadyEnd] = useCountdown(6, true);
 
@@ -76,7 +83,7 @@ const RandomWord = ({
     setBackgroundColor("bg-blue-500");
     const getRandomWordSound = new Audio("/getRandomWord.mp3");
     getRandomWordSound.play();
-    const remainingWords = words.filter(
+    const remainingWords = selectedWord.filter(
       (word) => !extractedWords.current.includes(word)
     );
     if (remainingWords.length > 0) {
@@ -86,7 +93,9 @@ const RandomWord = ({
     } else {
       // 如果所有词都已选完，可以进行一些处理，例如重新洗牌词汇数组
       setDisplayedText("egg:所有词都抽完了😎");
-      onEmptyWords();
+      setIsExtractedOver(() => {
+        return true;
+      });
     }
   };
 
@@ -105,7 +114,6 @@ const RandomWord = ({
     setDisplayedText("正确");
     setBackgroundColor("bg-green-500");
     successWords.current = [...successWords.current, word];
-    onSuccessWords(successWords.current);
     // console.log(successWords.current);
   };
 
@@ -117,7 +125,7 @@ const RandomWord = ({
     setDisplayedText("跳过");
     setBackgroundColor("bg-rose-500");
     skipWords.current = [...skipWords.current, word];
-    onSkipWords(skipWords.current);
+
     // console.log(skipWords.current);
   };
 
@@ -184,7 +192,7 @@ const RandomWord = ({
 
   // 添加键盘事件监听器
   useEffect(() => {
-    if (isReadyEnd) {
+    if (!isEnd && isReadyEnd) {
       document.body.addEventListener("keydown", throttledKeyPress);
     }
 
@@ -192,18 +200,50 @@ const RandomWord = ({
     return () => {
       document.body.removeEventListener("keydown", throttledKeyPress);
     };
-  }, [isReadyEnd, throttledKeyPress]);
+  }, [isEnd, isReadyEnd, throttledKeyPress]);
 
   // 添加螺旋仪事件监听器
   useEffect(() => {
-    if (isReadyEnd) {
+    if (!isEnd && isReadyEnd) {
       window.addEventListener("deviceorientation", throttledOrientation);
     }
     // 在组件卸载时移除事件监听器，防止内存泄漏
     return () => {
       window.removeEventListener("deviceorientation", throttledOrientation);
     };
-  }, [isReadyEnd, throttledOrientation]);
+  }, [isEnd, isReadyEnd, throttledOrientation]);
+
+  //结束后保存记录到LocalStorage
+  useEffect(() => {
+    if (isEnd || isExtractedOver) {
+      // 播放gameover音效
+      const gameOverSound = new Audio("/gameover.mp3");
+      gameOverSound.play();
+      exitFullscreen();
+      //将抽取过的词存入LocalStorage
+      // 获取之前的数据
+      const storedSelectedWords = localStorage.getItem("selectedWords");
+      const parsedSelectedWords =
+        storedSelectedWords !== null ? JSON.parse(storedSelectedWords) : [];
+      // 新的数据
+      const newData = {
+        title: title,
+        type: type,
+        time: time,
+        endTime: new Date().getTime(),
+        successWords: successWords.current,
+        skipWords: skipWords.current,
+      };
+      // 追加新的数据
+      const updatedSelectedWords = [newData, ...parsedSelectedWords];
+      // 保存到localStorage中
+      localStorage.setItem(
+        "selectedWords",
+        JSON.stringify(updatedSelectedWords)
+      );
+      router.push("/settlement");
+    }
+  }, [isEnd, isExtractedOver]);
 
   return (
     <div
@@ -215,8 +255,22 @@ const RandomWord = ({
       <p className="text-white text-6xl md:text-8xl text-center">
         {displayedText}
       </p>
+      <ScoreBoard
+        successWords={successWords.current}
+        skipWords={skipWords.current}
+      />
     </div>
   );
 };
 
 export default RandomWord;
+
+//退出全屏
+const exitFullscreen = () => {
+  if (document.fullscreenElement) {
+    // 检查当前是否处于全屏状态
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+};

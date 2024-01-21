@@ -1,29 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Progress } from "@nextui-org/progress";
-import { useEffect, useState } from "react";
-import useCountdown from "@/app/hooks/useCountdown";
+import { useEffect } from "react";
 
 function CountDown({
   time,
+  count,
   isStartCountDown,
-  onTimerEnd,
+  isEnd,
 }: {
   time: number;
+  count: number;
   isStartCountDown: boolean;
-  onTimerEnd: any;
+  isEnd: any;
 }) {
-  const [count, isEnd] = useCountdown(time, isStartCountDown);
-
   useEffect(() => {
     if (count <= 10) {
-      const countDownSound = new Audio("/countdown.mp3");
+      const countDownSound = new Audio("/countdown10sec.mp3");
       countDownSound.play();
       navigator.vibrate(100); // 震动100毫秒
     }
-    if (isEnd) {
-      onTimerEnd();
-    }
-  }, [count, isEnd]);
+  }, [count]);
 
   if (!isStartCountDown) {
     return null;
