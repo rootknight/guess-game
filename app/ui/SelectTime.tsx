@@ -50,7 +50,9 @@ const SelectTime = ({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-white">
+                {title}
+              </ModalHeader>
               <ModalBody>
                 <RadioGroup
                   orientation="horizontal"
@@ -75,7 +77,7 @@ const SelectTime = ({
                     },
                   }}
                 >
-                  <button onClick={handleStartGame}>开始游戏</button>
+                  <Button onClick={handleStartGame}>开始游戏</Button>
                 </Link>
               </ModalFooter>
             </>

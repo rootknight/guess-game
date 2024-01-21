@@ -45,6 +45,15 @@ const MusicPlayer = () => {
       <Switch
         size="lg"
         color="success"
+        // thumbIcon={({ isSelected, className }) =>
+        //   isSelected ? <MusicOn /> : <MusicOn className={className} />
+        // }
+        // startContent={
+        //   <Image src="/musicOn.webp" width={24} height={24} alt="开启音乐" />
+        // }
+        // endContent={
+        //   <Image src="/musicOff.webp" width={24} height={24} alt="开启音乐" />
+        // }
         isSelected={isAllowPlay}
         onValueChange={setIsAllowPlay}
       ></Switch>
