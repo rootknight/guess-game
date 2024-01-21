@@ -77,7 +77,7 @@ const SelectTime = ({
                     },
                   }}
                 >
-                  <Button onClick={handleStartGame}>开始游戏</Button>
+                  <button onClick={handleStartGame} className=“p-2 bg-gray-300”>开始游戏</button>
                 </Link>
               </ModalFooter>
             </>
