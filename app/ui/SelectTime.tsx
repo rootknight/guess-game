@@ -50,7 +50,7 @@ const SelectTime = ({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-white">
+              <ModalHeader className="flex flex-col gap-2 text-gray-800">
                 {title}
               </ModalHeader>
               <ModalBody>
@@ -77,7 +77,12 @@ const SelectTime = ({
                     },
                   }}
                 >
-                  <button onClick={handleStartGame} className=“p-2 bg-gray-300”>开始游戏</button>
+                  <button
+                    onClick={() => enterFullscreen()}
+                    className="p-2 bg-gray-500 text-white rounded-xl shadow-lg"
+                  >
+                    开始游戏
+                  </button>
                 </Link>
               </ModalFooter>
             </>

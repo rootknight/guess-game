@@ -42,29 +42,29 @@ function Page() {
   return (
     <div className="w-sreen h-dvh p-4 flex flex-col gap-2 relative">
       {/* <Header title={`游戏结束`} /> */}
-      <section className=" w-28 h-28 -translate-x-14 top-4 md:w-48 md:h-48 md:top-4 rounded-full border-dashed border-4 border-yellow-500 absolute left-1/2 md:-translate-x-24 bg-white shadow-lg flex flex-col justify-center items-center md:gap-2">
-        <p className="text-xl md:text-4xl text-orange-500">
+      <section className=" w-32 h-32 -translate-x-16 top-4 md:w-48 md:h-48 md:top-4 rounded-full border-dashed border-4 border-yellow-500 absolute left-1/2 md:-translate-x-24 bg-white shadow-lg flex flex-col justify-center items-center md:gap-2">
+        <p className="text-3xl font-bold md:text-4xl text-orange-500">
           得分: {successWords?.length || 0}
         </p>
         <p className=" text-sm text-gray-500 md:text-xl">词组：{title}</p>
         <p className="text-sm text-gray-500 md:text-xl">时长：{time}s</p>
       </section>
-      <section className="h-full grid grid-cols-2 gap-2 mt-20 md:mt-28 text-xl">
-        <div className="text-green-500 flex flex-col flex-grow">
+      <section className="h-full grid grid-cols-2 gap-2 mt-24 md:mt-28 text-xl">
+        <div className="text-emerald-500 flex flex-col">
           <p className="py-4 bg-gray-700 rounded-t-xl text-center">
             正确：{successWords?.length || 0}
           </p>
-          <div className="flex flex-col items-center flex-grow overflow-y-auto p-4 rounded-b-xl bg-gray-500">
+          <div className=" h-[calc(100dvh-16rem)] flex flex-col items-center overflow-y-auto p-4 rounded-b-xl bg-gray-500">
             {successWords?.map((item: any, index: any) => (
               <p key={index}>{item}</p>
             ))}
           </div>
         </div>
-        <div className="text-red-500 flex flex-col flex-grow">
+        <div className="text-amber-500 flex flex-col">
           <p className="py-4 bg-gray-700 rounded-t-xl text-center text-xl">
             跳过：{skipWords?.length || 0}
           </p>
-          <div className="flex flex-col items-center flex-grow overflow-y-auto p-4 rounded-b-xl bg-gray-500">
+          <div className="line-through h-[calc(100dvh-16rem)] flex flex-col items-center overflow-y-auto p-4 rounded-b-xl bg-gray-500">
             {skipWords?.map((item: any, index: any) => (
               <p key={index}>{item}</p>
             ))}

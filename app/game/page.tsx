@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import words from "@/app/data/words.json";
 import useCountdown from "@/app/hooks/useCountdown";
 import Link from "next/link";
+import { Button, ButtonGroup } from "@nextui-org/button";
 
 function Page() {
   let selectWords = useRef<string[]>([]);
@@ -31,7 +32,7 @@ function Page() {
   const [count, isEnd] = useCountdown(time, isStartCountDown);
 
   return (
-    <div className="p-4 h-[100dvw] w-[100dvh] rotate-90 origin-top-left translate-x-[100dvw] md:w-dvw md:h-dvh md:rotate-0 md:translate-x-0">
+    <div className="p-4 bg-white h-[100dvw] w-[100dvh] rotate-90 origin-top-left translate-x-[100dvw] xl:w-dvw xl:h-dvh xl:rotate-0 xl:translate-x-0">
       <div className="fixed top-8 left-8 right-8 flex flex-row justify-between content-start gap-2">
         <CountDown
           time={time}
