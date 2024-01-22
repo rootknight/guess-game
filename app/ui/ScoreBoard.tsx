@@ -16,6 +16,7 @@ const ScoreBoard = ({
           width={128}
           height={64}
           alt="skip"
+          priority={true}
           className="opacity-30 hidden md:block"
         />
         <Image
@@ -23,6 +24,7 @@ const ScoreBoard = ({
           width={128}
           height={64}
           alt="skip"
+          priority={true}
           className="opacity-30 md:hidden"
         />
       </div>
