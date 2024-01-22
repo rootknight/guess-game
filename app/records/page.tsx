@@ -2,6 +2,7 @@
 
 import Header from "@/app/ui/Header";
 import { Select, SelectSection, SelectItem } from "@nextui-org/select";
+import { useAsyncList } from "@react-stately/data";
 import {
   Table,
   TableHeader,
@@ -14,6 +15,7 @@ import { getKeyValue } from "@nextui-org/react";
 import Link from "next/link";
 import { Button, ButtonGroup } from "@nextui-org/button";
 import { GoX } from "react-icons/go";
+import { useEffect, useRef, useState } from "react";
 
 const columns = [
   {
@@ -35,39 +37,45 @@ const columns = [
 ];
 
 function Page() {
+  const [records, setRecords] = useState();
+  useEffect(() => {
+    const storedSelectedWords = JSON.parse(
+      localStorage.getItem("selectedWords") || "[]"
+    );
+
+    setRecords(() => {
+      return (
+        storedSelectedWords.map(
+          ({
+            title,
+            time,
+            successWords,
+            endTime,
+          }: {
+            title: string;
+            time: number;
+            successWords: string[];
+            endTime: string;
+          }) => {
+            const score = successWords ? successWords.length : 0;
+            // const gameTime = new Date(endTime).toLocaleString();
+            const Time = new Date(endTime);
+            const year = Time.getFullYear();
+            const month = String(Time.getMonth() + 1).padStart(2, "0");
+            const day = String(Time.getDate()).padStart(2, "0");
+            const hours = String(Time.getHours()).padStart(2, "0");
+            const minutes = String(Time.getMinutes()).padStart(2, "0");
+            const seconds = String(Time.getSeconds()).padStart(2, "0");
+
+            const formattedEndTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            const gameTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            return { title, time, score, gameTime };
+          }
+        ) || []
+      );
+    });
+  }, []);
   // 获取数据
-  const storedSelectedWords = JSON.parse(
-    localStorage.getItem("selectedWords") || "[]"
-  );
-
-  const records =
-    storedSelectedWords.map(
-      ({
-        title,
-        time,
-        successWords,
-        endTime,
-      }: {
-        title: string;
-        time: number;
-        successWords: string[];
-        endTime: string;
-      }) => {
-        const score = successWords ? successWords.length : 0;
-        // const gameTime = new Date(endTime).toLocaleString();
-        const Time = new Date(endTime);
-        const year = Time.getFullYear();
-        const month = String(Time.getMonth() + 1).padStart(2, "0");
-        const day = String(Time.getDate()).padStart(2, "0");
-        const hours = String(Time.getHours()).padStart(2, "0");
-        const minutes = String(Time.getMinutes()).padStart(2, "0");
-        const seconds = String(Time.getSeconds()).padStart(2, "0");
-
-        const formattedEndTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        const gameTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        return { title, time, score, gameTime };
-      }
-    ) || [];
 
   return (
     <div className=" w-screen h-dvh p-4 flex flex-col gap-4">
@@ -93,7 +101,7 @@ function Page() {
             <TableColumn key={column.key}>{column.label}</TableColumn>
           )}
         </TableHeader>
-        <TableBody items={records} emptyContent={"没有记录"}>
+        <TableBody items={records || []} emptyContent={"没有记录"}>
           {(item: any) => (
             <TableRow key={item.gameTime}>
               {(columnKey) => (
