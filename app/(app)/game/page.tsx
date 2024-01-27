@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import RandomWord from "@/app/ui/RandomWord";
-import CountDown from "@/app/ui/CountDown";
+import { useState, useRef } from "react";
+import RandomWord from "@/app/(app)/ui/RandomWord";
+import CountDown from "@/app/(app)/ui/CountDown";
 import { useSearchParams } from "next/navigation";
-import words from "@/app/data/words.json";
-import useCountdown from "@/app/hooks/useCountdown";
+import words from "@/app/(app)/data/placeholder-data";
+import useCountdown from "@/app/(app)/hooks/useCountdown";
 import Link from "next/link";
-import { Button, ButtonGroup } from "@nextui-org/button";
+import { GoX } from "react-icons/go";
 
 function Page() {
   let selectWords = useRef<string[]>([]);
@@ -51,7 +51,11 @@ function Page() {
         isEnd={isEnd}
       />
       <Link href={"/"} className=" fixed bottom-16 left-1/2 text-gray-300">
-        返回
+        <GoX
+          size={16}
+          color="white"
+          className="p-2 w-8 h-8 bg-gray-400 rounded-full shadow-lg opacity-30"
+        />
       </Link>
     </div>
   );

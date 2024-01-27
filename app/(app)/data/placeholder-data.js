@@ -1,9 +1,9 @@
-[
-  { "type": "hot", "title": "热门", "words": [] },
+const words = [
+  { type: "hot", title: "热门", words: [] },
   {
-    "type": "idiom",
-    "title": "中国成语",
-    "words": [
+    type: "idiom",
+    title: "中国成语",
+    words: [
       "阿狗阿猫",
       "阿姑阿翁",
       "阿家阿翁",
@@ -30890,13 +30890,13 @@
       "做贼心虚",
       "做张做势",
       "做张做致",
-      "做张做智"
-    ]
+      "做张做智",
+    ],
   },
   {
-    "type": "necessities",
-    "title": "日用品",
-    "words": [
+    type: "necessities",
+    title: "日用品",
+    words: [
       "牙刷",
       "牙膏",
       "洗发水",
@@ -30992,13 +30992,13 @@
       "洗面奶",
       "护肤霜",
       "油纸",
-      "洗衣板"
-    ]
+      "洗衣板",
+    ],
   },
   {
-    "type": "animal",
-    "title": "动物",
-    "words": [
+    type: "animal",
+    title: "动物",
+    words: [
       "狗",
       "猫",
       "鸟",
@@ -31378,13 +31378,13 @@
       "乌鸦",
       "布谷鸟",
       "知更鸟",
-      "画眉"
-    ]
+      "画眉",
+    ],
   },
   {
-    "type": "bible",
-    "title": "圣经",
-    "words": [
+    type: "bible",
+    title: "圣经",
+    words: [
       "亚伦",
       "亚伯拉罕",
       "以撒",
@@ -31472,7 +31472,9 @@
       "马太",
       "马可",
       "路加",
-      "约翰"
-    ]
-  }
-]
+      "约翰",
+    ],
+  },
+];
+
+export default words;

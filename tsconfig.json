@@ -26,6 +26,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "app/admin/*.tsx",
     ".next/types/**/*.ts",
     "app/ui/Header.tsx",
     "app/ui/TitleCard.tsx",

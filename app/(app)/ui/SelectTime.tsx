@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/modal";
 import { RadioGroup, Radio } from "@nextui-org/radio";
 import { Button } from "@nextui-org/button";
-import Link from "next/link";
+import { Link } from "@nextui-org/link";
 import { useState } from "react";
 
 const SelectTime = ({
@@ -68,22 +68,13 @@ const SelectTime = ({
                 </RadioGroup>
               </ModalBody>
               <ModalFooter>
-                <Link
-                  href={{
-                    pathname: "/game",
-                    query: {
-                      type: type,
-                      time: radioValue,
-                    },
-                  }}
+                <Button
+                  onPress={() => enterFullscreen()}
+                  as={Link}
+                  href={`/game?type=${type}&time=${radioValue}`}
                 >
-                  <button
-                    onClick={() => enterFullscreen()}
-                    className="p-2 bg-gray-500 text-white rounded-xl shadow-lg"
-                  >
-                    开始游戏
-                  </button>
-                </Link>
+                  开始游戏
+                </Button>
               </ModalFooter>
             </>
           )}

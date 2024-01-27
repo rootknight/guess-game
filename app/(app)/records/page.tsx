@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "@/app/ui/Header";
+import Header from "@/app/(app)/ui/Header";
 import { Select, SelectSection, SelectItem } from "@nextui-org/select";
 import { useAsyncList } from "@react-stately/data";
 import {
@@ -12,8 +12,8 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import { getKeyValue } from "@nextui-org/react";
-import Link from "next/link";
 import { Button, ButtonGroup } from "@nextui-org/button";
+import { Link } from "@nextui-org/link";
 import { GoX } from "react-icons/go";
 import { useEffect, useRef, useState } from "react";
 
@@ -81,13 +81,9 @@ function Page() {
     <div className=" w-screen h-dvh p-4 flex flex-col gap-4">
       <Header title="游戏记录">
         <Link href="/">
-          {/* <Button isIconOnly variant="shadow"> */}
-          <GoX
-            size={24}
-            color="white"
-            className="p-2 w-12 h-12 bg-gray-400 rounded-full shadow-lg"
-          />
-          {/* </Button> */}
+          <Button isIconOnly variant="shadow" as={Link} href="/">
+            <GoX size={24} color="white" />
+          </Button>
         </Link>
       </Header>
       <Table

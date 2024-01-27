@@ -1,6 +1,4 @@
 "use client";
-import MusicPlayer from "@/app/ui/MusicPlayer";
-
 const Header = ({
   title,
   children,

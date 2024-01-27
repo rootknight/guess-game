@@ -2,8 +2,8 @@
 "use client";
 
 import Link from "next/link";
-import SelectTime from "@/app/ui/SelectTime";
-import Header from "@/app/ui/Header";
+import SelectTime from "@/app/(app)/ui/SelectTime";
+import Header from "@/app/(app)/ui/Header";
 import { Button } from "@nextui-org/button";
 import { useDisclosure } from "@nextui-org/use-disclosure";
 import { useEffect, useState } from "react";
@@ -44,10 +44,10 @@ function Page() {
       {/* <Header title={`游戏结束`} /> */}
       <section className=" w-32 h-32 -translate-x-16 top-4 md:w-48 md:h-48 md:top-4 rounded-full border-dashed border-4 border-yellow-500 absolute left-1/2 md:-translate-x-24 bg-white shadow-lg flex flex-col justify-center items-center md:gap-2">
         <p className="text-3xl font-bold md:text-4xl text-orange-500">
-          得分: {successWords?.length || 0}
+          得分{successWords?.length || 0}
         </p>
-        <p className=" text-sm text-gray-500 md:text-xl">词组：{title}</p>
-        <p className="text-sm text-gray-500 md:text-xl">时长：{time}s</p>
+        <p className=" text-sm text-gray-500 md:text-xl">{title}</p>
+        <p className="text-sm text-gray-500 md:text-xl">{time}s</p>
       </section>
       <section className="h-full grid grid-cols-2 gap-2 mt-24 md:mt-28 text-xl">
         <div className="text-emerald-500 flex flex-col">

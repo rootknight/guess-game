@@ -2,7 +2,7 @@
 
 import { Button } from "@nextui-org/button";
 import { useDisclosure } from "@nextui-org/use-disclosure";
-import SelectTime from "@/app/ui/SelectTime";
+import SelectTime from "@/app/(app)/ui/SelectTime";
 
 export default function SelectWords({
   title,

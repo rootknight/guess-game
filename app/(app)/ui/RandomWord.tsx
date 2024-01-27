@@ -4,9 +4,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
-import useThrottle from "@/app/hooks/useThrottle";
-import useCountdown from "@/app/hooks/useCountdown";
-import ScoreBoard from "@/app/ui/ScoreBoard";
+import useThrottle from "@/app/(app)/hooks/useThrottle";
+import useCountdown from "@/app/(app)/hooks/useCountdown";
+import ScoreBoard from "@/app/(app)/ui/ScoreBoard";
 
 const RandomWord = ({
   type,
@@ -42,9 +42,9 @@ const RandomWord = ({
       setBackgroundColor("bg-amber-500");
       if (readyCount >= 4) {
         if (window.innerWidth >= 640) {
-          setDisplayedText("猜词者背对屏幕");
+          setDisplayedText("请猜词者背对屏幕");
         } else if (window.innerWidth < 640) {
-          setDisplayedText("横向举起屏幕");
+          setDisplayedText("请横向举起屏幕");
         }
       } else {
         const countDownSound = new Audio("/countdown.mp3");
