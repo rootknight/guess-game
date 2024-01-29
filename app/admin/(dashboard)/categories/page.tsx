@@ -15,7 +15,6 @@ const Page = async ({
 }) => {
   const query = searchParams?.query || "";
   const categories = await fetchCategories(query);
-  console.log(categories);
 
   return (
     <div className="flex flex-col gap-4">
