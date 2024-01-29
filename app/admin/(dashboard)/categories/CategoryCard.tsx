@@ -22,13 +22,25 @@ const CategoryCard = ({
       href={`/admin/categories/${categoryType}`}
     >
       <CardHeader className="flex gap-2 flex-row">
-        <p className="text-7xl">🎴</p>
+        <p className="text-6xl">🎴</p>
         <div className="flex flex-col items-start">
           <p className="text-md">{title}</p>
           <p className="text-small text-default-500">创建者：{createdUser}</p>
           <p className="text-small text-default-500">包含词汇：{wordCount}</p>
         </div>
       </CardHeader>
+      {/* <CardBody>
+        <p>这是词组描述</p>
+      </CardBody> */}
+      {/* <Divider />
+      <CardFooter>
+        <Button isIconOnly variant="light" className="w-1/2">
+          <MdDeleteOutline />
+        </Button>
+        <Button isIconOnly variant="light" className="w-1/2">
+          <MdOutlineEdit />
+        </Button>
+      </CardFooter> */}
     </Card>
   );
 };

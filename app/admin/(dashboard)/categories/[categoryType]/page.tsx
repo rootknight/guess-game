@@ -1,8 +1,9 @@
 import { Button } from "@nextui-org/button";
 import { AiOutlinePlus } from "react-icons/ai";
+import { MdOutlineEdit } from "react-icons/md";
 import Search from "@/app/admin/(dashboard)/categories/Search";
 import TableWords from "@/app/admin/(dashboard)/categories/[categoryType]/TableWords";
-import { fetchFilteredWords, fetchWordsPages } from "@/app/admin/lib/data";
+import { fetchFilteredWords, fetchCategories } from "@/app/admin/db/data";
 import Bread from "./Bread";
 
 const Page = async ({
@@ -20,32 +21,40 @@ const Page = async ({
   const currentPage = Number(searchParams?.page) || 1;
   const pageSize = Number(searchParams?.pageSize) || 10;
   const category = params.categoryType;
-  const words: any[] = await fetchFilteredWords(
+  const resault = await fetchFilteredWords(
     query,
     category,
     currentPage,
     pageSize
   );
-  console.log(words);
 
-  const totalPages = await fetchWordsPages(query, pageSize);
+  const { words, resaultCount, resaultPages } = resault.data;
+
+  const response = await fetchCategories(category);
+  const currentCategory = response.data[0].title;
 
   return (
     <div className="flex flex-col gap-4">
-      <Bread href={`/admin/categories/${category}`} text={words[0].title} />
+      <div className="flex flex-row gap-2">
+        <Bread href={`/admin/categories/${category}`} text={currentCategory!} />
+        <Button color="default" isIconOnly variant="light" className="h-[24px]">
+          <MdOutlineEdit />
+        </Button>
+      </div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-3 items-end">
           <div className="flex gap-2">
-            <Search />
+            <Search placeholder="查找单词" />
           </div>
           <Button color="primary" endContent={<AiOutlinePlus />}>
             添加单词
           </Button>
         </div>
         <TableWords
-          data={words}
+          data={words!}
           currentPage={currentPage}
-          totalPages={totalPages}
+          totalWords={resaultCount || 0}
+          totalPages={resaultPages || 0}
         />
       </div>
     </div>

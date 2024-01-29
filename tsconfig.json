@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -36,7 +36,9 @@
     "app/game/page.tsx",
     "app/settlement/page.tsx",
     "public/musicOn.jsx",
-    "app/ui/MusicOn.jsx"
+    "app/ui/MusicOn.jsx",
+    "app/admin/lib/seeddr.js",
+    "app/admin/db/seed.js"
   ],
   "exclude": ["node_modules"]
 }

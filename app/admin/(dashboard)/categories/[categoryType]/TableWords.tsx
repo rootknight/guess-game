@@ -8,16 +8,14 @@ import {
   TableCell,
   getKeyValue,
   Pagination,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
-
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 const columns = [
   {
     key: "word",
     label: "单词",
-  },
-  {
-    key: "title",
-    label: "分类",
   },
   {
     key: "createdAt",
@@ -36,21 +34,24 @@ const columns = [
 export default function TableWords({
   data,
   currentPage,
+  totalWords,
   totalPages,
 }: {
   data: any[];
   currentPage: number;
+  totalWords: number;
   totalPages: number;
 }) {
-  const wordsCount = data.length;
-
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
   return (
     <Table
       aria-label="Example table with dynamic content"
       bottomContent={
         <div className="flex w-full justify-between items-center">
           <span className="text-small text-default-400">
-            总共 {wordsCount} 条
+            总共 {totalWords} 条
           </span>
           <Pagination
             isCompact
@@ -59,18 +60,28 @@ export default function TableWords({
             color="secondary"
             page={currentPage}
             total={totalPages}
+            onChange={(page) => {
+              replace(`${pathname}?page=${page}`);
+            }}
           />
-          <label className="flex items-center text-default-400 text-small">
-            每页:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={(e) => console.log(e.target.value)}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
+          <Select
+            className="w-[80px]"
+            label="每页条数"
+            labelPlacement="outside-left"
+            onChange={(e) => {
+              replace(`${pathname}?pageSize=${e.target.value}`);
+            }}
+          >
+            <SelectItem key={5} value="5">
+              5
+            </SelectItem>
+            <SelectItem key={10} value="10">
+              10
+            </SelectItem>
+            <SelectItem key={15} value="15">
+              15
+            </SelectItem>
+          </Select>
         </div>
       }
     >

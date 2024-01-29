@@ -1,10 +1,9 @@
 import Bread from "@/app/admin/(dashboard)/categories/Bread";
-import { Button } from "@nextui-org/button";
-import { AiOutlinePlus } from "react-icons/ai";
 
 import Search from "@/app/admin/(dashboard)/categories/Search";
-import { fetchCategories } from "@/app/admin/lib/data";
+import { fetchCategories } from "@/app/admin/db/data";
 import CategoryCard from "./CategoryCard";
+import CreateCategory from "./CreateCategory";
 
 const Page = async ({
   searchParams,
@@ -14,7 +13,8 @@ const Page = async ({
   };
 }) => {
   const query = searchParams?.query || "";
-  const categories = await fetchCategories(query);
+  const resault = await fetchCategories(query);
+  const categories = resault.data;
 
   return (
     <div className="flex flex-col gap-4">
@@ -22,19 +22,17 @@ const Page = async ({
       <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-3 items-end">
           <div className="flex gap-2">
-            <Search />
+            <Search placeholder="查找词组..." />
           </div>
-          <Button color="primary" endContent={<AiOutlinePlus />}>
-            添加词组
-          </Button>
+          <CreateCategory />
         </div>
         <div className="flex flex-row flex-wrap gap-2 w-full">
           {categories.map((category) => (
             <CategoryCard
               key={category.id}
-              title={category.title}
-              categoryType={category.type}
-              createdUser={category.createdUser}
+              title={category.title!}
+              categoryType={category.type!}
+              createdUser={category.createdUser!}
               wordCount={category.wordCount}
             />
           ))}

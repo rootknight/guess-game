@@ -31477,4 +31477,4 @@ const words = [
   },
 ];
 
-export default words;
+module.exports = words;
