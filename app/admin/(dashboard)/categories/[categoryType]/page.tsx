@@ -1,9 +1,9 @@
 import { Button } from "@nextui-org/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import { MdOutlineEdit } from "react-icons/md";
+import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import Search from "@/app/admin/(dashboard)/categories/Search";
 import TableWords from "@/app/admin/(dashboard)/categories/[categoryType]/TableWords";
-import { fetchFilteredWords, fetchCategories } from "@/app/admin/db/data";
+import { fetchFilteredWords, fetchCategories } from "@/app/lib/data";
 import Bread from "./Bread";
 
 const Page = async ({
@@ -37,9 +37,6 @@ const Page = async ({
     <div className="flex flex-col gap-4">
       <div className="flex flex-row gap-2">
         <Bread href={`/admin/categories/${category}`} text={currentCategory!} />
-        <Button color="default" isIconOnly variant="light" className="h-[24px]">
-          <MdOutlineEdit />
-        </Button>
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-3 items-end">

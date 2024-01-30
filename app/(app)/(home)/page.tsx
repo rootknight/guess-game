@@ -1,5 +1,5 @@
 import SelectWords from "@/app/(app)/ui/SelectWords";
-import words from "@/app/(app)/data/placeholder-data";
+import { words } from "@/app/(app)/db/data.json";
 import Header from "@/app/(app)/ui/Header";
 import { Button } from "@nextui-org/button";
 import { GoHistory } from "react-icons/go";

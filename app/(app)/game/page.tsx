@@ -5,7 +5,7 @@ import { useState, useRef } from "react";
 import RandomWord from "@/app/(app)/ui/RandomWord";
 import CountDown from "@/app/(app)/ui/CountDown";
 import { useSearchParams } from "next/navigation";
-import words from "@/app/(app)/data/placeholder-data";
+import { words } from "@/app/(app)/db/data.json";
 import useCountdown from "@/app/(app)/hooks/useCountdown";
 import Link from "next/link";
 import { GoX } from "react-icons/go";

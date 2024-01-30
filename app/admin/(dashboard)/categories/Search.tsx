@@ -10,7 +10,6 @@ const Search = ({ placeholder }: { placeholder?: string }) => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const handleSearch = useDebouncedCallback((value: string) => {
-    console.log(`搜索... ${value}`);
     const params = new URLSearchParams(searchParames);
     params.set("page", "1");
     if (value) {
@@ -22,16 +21,17 @@ const Search = ({ placeholder }: { placeholder?: string }) => {
   }, 1000);
 
   return (
-    <Input
-      isClearable
-      labelPlacement="outside-left"
-      placeholder={placeholder}
-      // value={searchParames.get("query")?.toString()}
-      onValueChange={handleSearch}
-      defaultValue=""
-      className="w-full"
-      startContent={<AiOutlineSearch />}
-    />
+    <div>
+      <Input
+        labelPlacement="outside-left"
+        placeholder={placeholder}
+        // value={searchParames.get("query")?.toString()}
+        onValueChange={handleSearch}
+        defaultValue={searchParames.get("query")?.toString()}
+        className="w-full"
+        startContent={<AiOutlineSearch />}
+      />
+    </div>
   );
 };
 

@@ -9,7 +9,10 @@
     "lint": "next lint",
     "dgenerate": "drizzle-kit generate:sqlite",
     "dpush": "drizzle-kit push:sqlite",
-    "dstudio": "drizzle-kit studio"
+    "dstudio": "drizzle-kit studio",
+    "ddrop": "drizzle-kit drop",
+    "dcheck": "drizzle-kit check:sqlite",
+    "dseed": "tsx ./app/db/seed.ts"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^14.1.0",
@@ -19,6 +22,7 @@
     "better-sqlite3": "^9.3.0",
     "dotenv": "^16.4.1",
     "drizzle-orm": "^0.29.3",
+    "drizzle-zod": "^0.5.1",
     "framer-motion": "^10.18.0",
     "next": "14.0.4",
     "react": "^18",

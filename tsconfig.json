@@ -18,6 +18,7 @@
         "name": "next"
       }
     ],
+    "baseUrl": "./",
     "paths": {
       "@/*": ["./*"]
     }
@@ -26,7 +27,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "app/admin/*.tsx",
     ".next/types/**/*.ts",
     "app/ui/Header.tsx",
     "app/ui/TitleCard.tsx",
@@ -37,8 +37,8 @@
     "app/settlement/page.tsx",
     "public/musicOn.jsx",
     "app/ui/MusicOn.jsx",
-    "app/admin/lib/seeddr.js",
-    "app/admin/db/seed.js"
+    "app/lib/seeddr.js",
+    "app/db/seed.js"
   ],
   "exclude": ["node_modules"]
 }

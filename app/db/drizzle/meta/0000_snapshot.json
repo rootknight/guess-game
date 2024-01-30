@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "122aa5b9-078b-4b15-b3b7-142dc6dc1403",
+  "id": "3d5f2002-2713-400a-ba4e-9fe4a88b065f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "categories": {
@@ -80,13 +80,6 @@
           "name": "categories_type_unique",
           "columns": [
             "type"
-          ],
-          "isUnique": true
-        },
-        "categories_title_unique": {
-          "name": "categories_title_unique",
-          "columns": [
-            "title"
           ],
           "isUnique": true
         }

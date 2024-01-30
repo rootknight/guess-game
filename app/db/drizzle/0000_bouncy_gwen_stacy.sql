@@ -51,6 +51,5 @@ CREATE TABLE `words` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `categories_type_unique` ON `categories` (`type`);--> statement-breakpoint
-CREATE UNIQUE INDEX `categories_title_unique` ON `categories` (`title`);--> statement-breakpoint
 CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);--> statement-breakpoint
 CREATE UNIQUE INDEX `words_word_categoryId_unique` ON `words` (`word`,`categoryId`);

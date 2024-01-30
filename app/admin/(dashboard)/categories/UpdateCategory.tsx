@@ -9,16 +9,28 @@ import {
 import { Button } from "@nextui-org/button";
 import { useDisclosure } from "@nextui-org/use-disclosure";
 import { AiOutlinePlus } from "react-icons/ai";
+import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { Input } from "@nextui-org/input";
 import { Textarea } from "@nextui-org/input";
 import { useFormState } from "react-dom";
-import { createCategory } from "@/app/lib/createCategory";
+import { updateCategory } from "@/app/lib/updateCategory";
 import { ZodError } from "zod";
 import { Link } from "@nextui-org/link";
+import { deleteCategory } from "@/app/lib/deleteCategory";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const CreateCategory = () => {
+const UpdateCategory = ({
+  id,
+  title,
+  categoryType,
+  description,
+}: {
+  id: number;
+  title: string;
+  categoryType: string;
+  description: string;
+}) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const initialState: {
     code: number;
@@ -26,7 +38,7 @@ const CreateCategory = () => {
     err: ZodError | any;
   } | null = null;
   const userId = "b0edb5f4-df84-46bc-9503-de9d1974b8e9";
-  const [state, dispatch] = useFormState(createCategory, initialState);
+  const [state, dispatch] = useFormState(updateCategory, initialState);
   const router = useRouter();
 
   useEffect(() => {
@@ -38,15 +50,15 @@ const CreateCategory = () => {
 
   return (
     <div>
-      <Button color="primary" endContent={<AiOutlinePlus />} onPress={onOpen}>
-        添加词组
+      <Button onPress={onOpen} variant="light" className="w-1/2">
+        编辑
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
         <ModalContent>
           {(onClose) => (
             <form action={dispatch}>
               <ModalHeader className="flex flex-col gap-1">
-                添加词组
+                编辑 {title}
               </ModalHeader>
               <ModalBody>
                 <input type="hidden" name="userId" value={userId} />
@@ -57,6 +69,7 @@ const CreateCategory = () => {
                   label="名称"
                   isRequired
                   autoFocus
+                  defaultValue={title}
                   isInvalid={state?.err?.title?._errors}
                   errorMessage={state?.err?.title?._errors?.join(", ")}
                 />
@@ -66,6 +79,7 @@ const CreateCategory = () => {
                   name="type"
                   label="简写(字母)"
                   isRequired
+                  defaultValue={categoryType}
                   isInvalid={state?.err?.type?._errors || state?.code === 400}
                   errorMessage={
                     state?.code === 400
@@ -78,9 +92,21 @@ const CreateCategory = () => {
                   label="描述"
                   placeholder="输入描述..."
                   isRequired
+                  defaultValue={description}
                   isInvalid={state?.err?.description?._errors}
                   errorMessage={state?.err?.description?._errors?.join(", ")}
                 />
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={async () => {
+                    await deleteCategory(categoryType);
+                    router.refresh();
+                    onClose();
+                  }}
+                >
+                  删除词组
+                </Button>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
@@ -98,4 +124,4 @@ const CreateCategory = () => {
   );
 };
 
-export default CreateCategory;
+export default UpdateCategory;

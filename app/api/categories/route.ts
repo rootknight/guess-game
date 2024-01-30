@@ -1,4 +1,4 @@
-import { fetchCategories, fetchFilteredWords } from "@/app/admin/lib/data";
+import { fetchCategories, fetchFilteredWords } from "@/app/lib/data";
 
 export async function GET() {
   const res = await fetchCategories();

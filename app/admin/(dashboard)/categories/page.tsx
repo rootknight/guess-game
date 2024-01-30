@@ -1,7 +1,7 @@
 import Bread from "@/app/admin/(dashboard)/categories/Bread";
 
 import Search from "@/app/admin/(dashboard)/categories/Search";
-import { fetchCategories } from "@/app/admin/db/data";
+import { fetchCategories } from "@/app/lib/data";
 import CategoryCard from "./CategoryCard";
 import CreateCategory from "./CreateCategory";
 
@@ -30,10 +30,12 @@ const Page = async ({
           {categories.map((category) => (
             <CategoryCard
               key={category.id}
+              id={category.id}
               title={category.title!}
               categoryType={category.type!}
               createdUser={category.createdUser!}
               wordCount={category.wordCount}
+              description={category.description}
             />
           ))}
         </div>

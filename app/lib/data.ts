@@ -1,6 +1,6 @@
-import { db } from "@/app/admin/db/index";
+import { db } from "@/app/db/index";
 import { unstable_noStore as noStore } from "next/cache";
-import { Users, Categories, Words, Rooms } from "@/app/admin/db/schema";
+import { Users, Categories, Words, Rooms } from "@/app/db/schema";
 import { and, count, desc, eq, like, or, sql } from "drizzle-orm";
 import { SqliteError } from "better-sqlite3";
 
@@ -13,6 +13,7 @@ export async function fetchCategories(query: string) {
         id: Categories.id,
         type: Categories.type,
         title: Categories.title,
+        description: Categories.description,
         createdAt: Categories.createdAt,
         updatedAt: Categories.updatedAt,
         version: Categories.version,
@@ -24,11 +25,14 @@ export async function fetchCategories(query: string) {
       .leftJoin(Users, eq(Categories.userId, Users.userId))
       .leftJoin(Words, eq(Categories.id, Words.categoryId))
       .where(
-        or(
-          like(Categories.title, `%${query}%`),
-          like(Users.name, `%${query}%`),
-          like(Users.email, `%${query}%`),
-          like(Categories.type, `${query}`)
+        and(
+          or(
+            like(Categories.title, `%${query}%`),
+            like(Users.name, `%${query}%`),
+            like(Users.email, `%${query}%`),
+            like(Categories.type, `${query}`)
+          ),
+          like(Categories.isDeleted, "0")
         )
       )
       .groupBy(Categories.id)

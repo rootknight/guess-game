@@ -23,7 +23,7 @@ export const Users = sqliteTable("users", {
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
-  role: text("role", { enum: ["admin", "player"] }).notNull(),
+  role: text("role").notNull(),
   createdAt: integer("createdAt").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: integer("updatedAt").default(sql`CURRENT_TIMESTAMP`),
   version: integer("version").default(1),
@@ -33,7 +33,7 @@ export const Users = sqliteTable("users", {
 export const Categories = sqliteTable("categories", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   type: text("type").unique(),
-  title: text("title").unique(),
+  title: text("title"),
   description: text("description").notNull(),
   userId: text("userId")
     .notNull()
