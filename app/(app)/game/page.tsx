@@ -5,12 +5,13 @@ import { useState, useRef } from "react";
 import RandomWord from "@/app/(app)/ui/RandomWord";
 import CountDown from "@/app/(app)/ui/CountDown";
 import { useSearchParams } from "next/navigation";
-import { words } from "@/app/(app)/db/data.json";
+import data from "@/app/(app)/db/data.json";
 import useCountdown from "@/app/(app)/hooks/useCountdown";
 import Link from "next/link";
 import { GoX } from "react-icons/go";
 
 function Page() {
+  const words = data.words;
   let selectWords = useRef<string[]>([]);
   let title = useRef<string>("");
   //根据当前url的time获取对应时间

@@ -1,11 +1,12 @@
 import SelectWords from "@/app/(app)/ui/SelectWords";
-import { words } from "@/app/(app)/db/data.json";
+import data from "@/app/(app)/db/data.json";
 import Header from "@/app/(app)/ui/Header";
 import { Button } from "@nextui-org/button";
 import { GoHistory } from "react-icons/go";
 import { Link } from "@nextui-org/link";
 
 export default function Page() {
+  const words = data.words;
   return (
     <div className="w-screen h-dvh p-4 flex flex-col gap-4">
       <Header title="你比我猜">
