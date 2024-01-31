@@ -1,6 +1,6 @@
 import Bread from "@/app/admin/(dashboard)/categories/Bread";
 
-import Search from "@/app/admin/(dashboard)/categories/Search";
+import Search from "@/app/admin/ui/Search";
 import { fetchCategories } from "@/app/lib/data";
 import CategoryCard from "./CategoryCard";
 import CreateCategory from "./CreateCategory";

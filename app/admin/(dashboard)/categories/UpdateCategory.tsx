@@ -8,14 +8,10 @@ import {
 } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 import { useDisclosure } from "@nextui-org/use-disclosure";
-import { AiOutlinePlus } from "react-icons/ai";
-import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { Input } from "@nextui-org/input";
 import { Textarea } from "@nextui-org/input";
 import { useFormState } from "react-dom";
 import { updateCategory } from "@/app/lib/updateCategory";
-import { ZodError } from "zod";
-import { Link } from "@nextui-org/link";
 import { deleteCategory } from "@/app/lib/deleteCategory";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -35,7 +31,6 @@ const UpdateCategory = ({
   const initialState: {
     code: number;
     msg: string;
-    err: ZodError | any;
   } | null = null;
   const userId = "b0edb5f4-df84-46bc-9503-de9d1974b8e9";
   const [state, dispatch] = useFormState(updateCategory, initialState);
@@ -57,9 +52,7 @@ const UpdateCategory = ({
       <Modal isOpen={isOpen} onClose={onClose} backdrop="blur">
         <ModalContent>
           <form action={dispatch}>
-            <ModalHeader className="flex flex-col gap-1">
-              编辑 {title} {id}
-            </ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">编辑词组</ModalHeader>
             <ModalBody>
               <input type="hidden" name="userId" value={userId} />
               <input type="hidden" name="categoryId" value={id} />
@@ -71,8 +64,8 @@ const UpdateCategory = ({
                 isRequired
                 autoFocus
                 defaultValue={title}
-                isInvalid={state?.err?.title?._errors}
-                errorMessage={state?.err?.title?._errors?.join(", ")}
+                isInvalid={state?.data?.titleErrors !== undefined}
+                errorMessage={state?.data?.titleErrors}
               />
               <Input
                 type="text"
@@ -81,8 +74,13 @@ const UpdateCategory = ({
                 label="简写(字母)"
                 isRequired
                 defaultValue={categoryType}
-                isInvalid={state?.err?.type?._errors}
-                errorMessage={state?.err?.type?._errors?.join(", ")}
+                isInvalid={
+                  state?.data?.typeErrors !== undefined ||
+                  state?.data?.typeIsExist !== undefined
+                }
+                errorMessage={
+                  state?.data?.typeErrors || state?.data?.typeIsExist
+                }
               />
               <Textarea
                 name="description"
@@ -90,8 +88,8 @@ const UpdateCategory = ({
                 placeholder="输入描述..."
                 isRequired
                 defaultValue={description}
-                isInvalid={state?.err?.description?._errors}
-                errorMessage={state?.err?.description?._errors?.join(", ")}
+                isInvalid={state?.data?.descriptionErrors !== undefined}
+                errorMessage={state?.data?.descriptionErrors}
               />
               <Button
                 color="danger"

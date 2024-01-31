@@ -1,7 +1,6 @@
 import { Button } from "@nextui-org/button";
-import { AiOutlinePlus } from "react-icons/ai";
-import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
-import Search from "@/app/admin/(dashboard)/categories/Search";
+import CreateWord from "@/app/admin/(dashboard)/categories/[categoryType]/CreateWord";
+import Search from "@/app/admin/ui/Search";
 import TableWords from "@/app/admin/(dashboard)/categories/[categoryType]/TableWords";
 import { fetchFilteredWords, fetchCategories } from "@/app/lib/data";
 import Bread from "./Bread";
@@ -43,9 +42,7 @@ const Page = async ({
           <div className="flex gap-2">
             <Search placeholder="查找单词" />
           </div>
-          <Button color="primary" endContent={<AiOutlinePlus />}>
-            添加单词
-          </Button>
+          <CreateWord categoryId={response.data[0].id} />
         </div>
         <TableWords
           data={words!}

@@ -38,12 +38,16 @@ export async function updateCategory(prevState: any, formData: FormData) {
   });
   //准备插入的数据
   if (!parse.success) {
-    console.log(parse.error.format());
-
+    const err = parse.error.format();
     return {
       code: 400,
       msg: "数据验证失败",
-      err: parse.error.format(),
+      data: {
+        titleErrors: err.title?._errors.join("\n"),
+        typeErrors: err.type?._errors.join("\n"),
+        descriptionErrors: err.description?._errors.join("\n"),
+        userIdErrors: err.userId?._errors.join("\n"),
+      },
     };
   }
   const { id, title, type, description, userId } = parse.data;
@@ -68,9 +72,9 @@ export async function updateCategory(prevState: any, formData: FormData) {
     console.log(error.message);
     if (error.message === "UNIQUE constraint failed: categories.type") {
       return {
-        code: 400,
+        code: 401,
         msg: "分类已存在",
-        err: error.message,
+        data: { typeIsExist: "分类已存在" },
       };
     }
   }

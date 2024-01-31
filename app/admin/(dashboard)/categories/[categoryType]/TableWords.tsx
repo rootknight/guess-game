@@ -12,6 +12,7 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 const columns = [
   {
     key: "word",
