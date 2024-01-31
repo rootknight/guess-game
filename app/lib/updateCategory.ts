@@ -26,8 +26,11 @@ const updateSchema = createInsertSchema(Categories, {
 
 //创建分类
 export async function updateCategory(prevState: any, formData: FormData) {
+  console.log(typeof formData.get("categoryId"));
+
   //使用Zod验证FormData
   const parse = updateSchema.safeParse({
+    id: Number(formData.get("categoryId")),
     title: formData.get("title"),
     type: formData.get("type"),
     description: formData.get("description"),
@@ -35,13 +38,15 @@ export async function updateCategory(prevState: any, formData: FormData) {
   });
   //准备插入的数据
   if (!parse.success) {
+    console.log(parse.error.format());
+
     return {
       code: 400,
       msg: "数据验证失败",
       err: parse.error.format(),
     };
   }
-  const { title, type, description, userId } = parse.data;
+  const { id, title, type, description, userId } = parse.data;
 
   try {
     console.log("Updating category data...");
@@ -54,7 +59,7 @@ export async function updateCategory(prevState: any, formData: FormData) {
         description,
         userId,
       })
-      .where(eq(Categories.type, `${type}`));
+      .where(eq(Categories.id, id || 0));
     return {
       code: 200,
       msg: "修改成功",

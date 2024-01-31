@@ -26,7 +26,7 @@ const CategoryCard = ({
       className="max-w-[238px] min-w-fit w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4"
     >
       <CardHeader className="flex gap-2 flex-row">
-        <p className="text-7xl">🎴</p>
+        <SvgCard />
         <div className="flex flex-col items-start">
           <p className="text-md">{title}</p>
           <p className="text-md">{categoryType}</p>
@@ -48,7 +48,7 @@ const CategoryCard = ({
           as={Link}
           href={`/admin/categories/${categoryType}`}
           variant="light"
-          className="w-1/2"
+          className="w-full"
         >
           查看
         </Button>
@@ -56,5 +56,36 @@ const CategoryCard = ({
     </Card>
   );
 };
+
+const SvgCard = ({ props }: { props?: any }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={68.75}
+    height={88}
+    fill="none"
+    {...props}
+  >
+    <defs>
+      <clipPath id="a">
+        <rect width={68.75} height={88} rx={0} />
+      </clipPath>
+    </defs>
+    <g clipPath="url(#a)">
+      <path
+        fill="#333"
+        d="M62.7 0H6.05C2.75 0 0 2.475 0 5.638v76.724C0 85.525 2.75 88 6.05 88H62.7c3.3 0 6.05-2.475 6.05-5.638V5.638C68.75 2.475 66 0 62.7 0Z"
+      />
+      <path
+        fill="#B70000"
+        d="M60.913 2.75H7.837c-3.163 0-5.088 2.338-5.088 5.225V46.75L66 80.162V8.25c0-2.888-1.925-5.5-5.087-5.5Z"
+      />
+      <circle cx={24.75} cy={26.125} r={17.875} fill="#FFF" />
+      <path
+        fill="#333"
+        d="M66.55 80.025H2.2V46.75c33 0 64.35 14.025 64.35 33.275Z"
+      />
+    </g>
+  </svg>
+);
 
 export default CategoryCard;
