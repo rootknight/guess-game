@@ -32,7 +32,7 @@ export async function fetchCategories(query: string) {
             like(Users.email, `%${query}%`),
             like(Categories.type, `${query}`)
           ),
-          like(Categories.isDeleted, "0")
+          eq(Categories.isDeleted, false)
         )
       )
       .groupBy(Categories.id)
@@ -79,7 +79,8 @@ export async function fetchFilteredWords(
         .where(
           and(
             like(Words.word, `%${query}%`),
-            like(Categories.type, `${category}`)
+            like(Categories.type, `${category}`),
+            eq(Words.isDeleted, false)
           )
         )
         .orderBy(desc(Words.updatedAt))

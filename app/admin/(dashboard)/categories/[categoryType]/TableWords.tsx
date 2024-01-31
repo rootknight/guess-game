@@ -6,13 +6,15 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  getKeyValue,
   Pagination,
   Select,
   SelectItem,
 } from "@nextui-org/react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
+import { useCallback, useEffect, useState } from "react";
+import DeleteWord from "@/app/admin/(dashboard)/categories/[categoryType]/DeleteWord";
+import UpdateWord from "./UpdateWord";
+
 const columns = [
   {
     key: "word",
@@ -46,43 +48,83 @@ export default function TableWords({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const [page, setPage] = useState("1");
+  const [pageSize, setPageSize] = useState("10");
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", page);
+    params.set("pageSize", pageSize);
+    replace(`${pathname}?${params.toString()}`);
+  }, [page, pathname, pageSize, replace, searchParams]);
+
+  type Word = (typeof data)[0];
+
+  const renderCell = useCallback((word: Word, columnKey: React.Key) => {
+    const cellValue = word[columnKey as keyof Word];
+
+    switch (columnKey) {
+      case "word":
+        return <p className="text-bold text-sm">{word.word}</p>;
+      case "createdAt":
+        return <p className="text-bold text-sm">{word.createdAt}</p>;
+      case "updatedAt":
+        return <p className="text-bold text-sm">{word.updatedAt}</p>;
+      case "action":
+        return (
+          <div className="relative flex items-center gap-2">
+            <UpdateWord wordId={word.id} word={word.word} />
+            <DeleteWord wordId={word.id} word={word.word} />
+          </div>
+        );
+      default:
+        return cellValue;
+    }
+  }, []);
+
   return (
     <Table
-      aria-label="Example table with dynamic content"
-      bottomContent={
+      aria-label="当前分类的单词表"
+      isHeaderSticky
+      classNames={{ wrapper: "h-[calc(100dvh-20rem)]", th: "text-base" }}
+      topContentPlacement="outside"
+      bottomContentPlacement="outside"
+      topContent={
         <div className="flex w-full justify-between items-center">
           <span className="text-small text-default-400">
             总共 {totalWords} 条
           </span>
+          <label className="flex items-center text-default-400 text-small">
+            每页:
+            <select
+              className="bg-transparent outline-none text-default-400 text-small"
+              defaultValue={`${searchParams.get("pageSize") || 10}`}
+              onChange={(e) => {
+                setPageSize(e.target.value);
+              }}
+            >
+              {[5, 10, 20, 50, 100].map((pageSize) => (
+                <option key={pageSize} value={`${pageSize}`}>
+                  {pageSize}
+                </option>
+              ))}
+            </select>
+            条
+          </label>
+        </div>
+      }
+      bottomContent={
+        <div className="flex w-full justify-center items-center">
           <Pagination
-            isCompact
             showControls
             showShadow
             color="secondary"
             page={currentPage}
             total={totalPages}
             onChange={(page) => {
-              replace(`${pathname}?page=${page}`);
+              setPage(`${page}`);
             }}
           />
-          <Select
-            className="w-[80px]"
-            label="每页条数"
-            labelPlacement="outside-left"
-            onChange={(e) => {
-              replace(`${pathname}?pageSize=${e.target.value}`);
-            }}
-          >
-            <SelectItem key={5} value="5">
-              5
-            </SelectItem>
-            <SelectItem key={10} value="10">
-              10
-            </SelectItem>
-            <SelectItem key={15} value="15">
-              15
-            </SelectItem>
-          </Select>
         </div>
       }
     >
@@ -93,7 +135,7 @@ export default function TableWords({
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
-              <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+              <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}
           </TableRow>
         )}

@@ -27,8 +27,6 @@ const CreateCategory = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(state);
-
     if (state?.code === 200) {
       onClose();
       router.refresh();

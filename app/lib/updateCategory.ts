@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from "@/app/db/index";
+import { sql } from "drizzle-orm";
 import { Categories } from "@/app/db/schema";
 import { SqliteError } from "better-sqlite3";
 import { z } from "zod";
@@ -62,6 +63,7 @@ export async function updateCategory(prevState: any, formData: FormData) {
         type,
         description,
         userId,
+        updatedAt: sql`CURRENT_TIMESTAMP`,
       })
       .where(eq(Categories.id, id || 0));
     return {
