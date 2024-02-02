@@ -20,7 +20,7 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": [
@@ -28,17 +28,17 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/ui/Header.tsx",
-    "app/ui/TitleCard.tsx",
-    "app/ui/MusicPlayer.tsx",
-    "app/ui/SelectWords.tsx",
-    "app/(home)/page.tsx",
-    "app/game/page.tsx",
-    "app/settlement/page.tsx",
+    "src/app/ui/Header.tsx",
+    "src/app/ui/TitleCard.tsx",
+    "src/app/ui/MusicPlayer.tsx",
+    "src/app/ui/SelectWords.tsx",
+    "src/app/(home)/page.tsx",
+    "src/app/game/page.tsx",
+    "src/app/settlement/page.tsx",
     "public/musicOn.jsx",
-    "app/ui/MusicOn.jsx",
-    "app/lib/seeddr.js",
-    "app/db/seed.js"
+    "src/app/ui/MusicOn.jsx",
+    "src/lib/seeddr.js",
+    "src/db/seed.js"
   ],
   "exclude": ["node_modules"]
 }

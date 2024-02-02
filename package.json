@@ -3,16 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean": "rm -rf node_modules && rm -rf .next",
     "dev": "next dev --experimental-https",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dgenerate": "drizzle-kit generate:sqlite",
-    "dpush": "drizzle-kit push:sqlite",
-    "dstudio": "drizzle-kit studio",
-    "ddrop": "drizzle-kit drop",
-    "dcheck": "drizzle-kit check:sqlite",
-    "dseed": "tsx ./app/db/seed.ts"
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:push": "drizzle-kit push:sqlite",
+    "db:studio": "drizzle-kit studio --verbose",
+    "db:drop": "drizzle-kit drop",
+    "db:check": "drizzle-kit check:sqlite",
+    "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^14.1.0",
