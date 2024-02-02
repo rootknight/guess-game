@@ -1,9 +1,12 @@
 import Bread from "@/components/admin/words/WordsBread";
-
 import Search from "@/components/admin/Search";
 import { fetchCategories } from "@/lib/fetchers/data";
-import CategoryCard from "../../../../components/admin/words/CategoryCard";
-import CreateCategory from "../../../../components/admin/words/CreateCategory";
+import CategoryCard from "../../../../../components/admin/words/CategoryCard";
+import CreateCategory from "../../../../../components/admin/words/CreateCategory";
+
+export const metadata = {
+  title: "词组管理",
+};
 
 const Page = async ({
   searchParams,

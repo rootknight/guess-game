@@ -3,7 +3,10 @@ import "@/styles/globals.css";
 import { Providers } from "@/styles/providers";
 
 export const metadata: Metadata = {
-  title: "你比我猜",
+  title: {
+    template: "%s | 你比我猜",
+    default: "你比我猜",
+  },
   description: "你来比划我来猜",
 };
 

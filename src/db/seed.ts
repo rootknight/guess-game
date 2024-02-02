@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import Database from "better-sqlite3";
 import * as schema from "./schema";
-// import { db } from "@/db/index";
+import bcrypt from "bcrypt";
 import { users, categories, words, rooms } from "./seed.json";
 import { Users, Categories, Words, Rooms } from "./schema";
 
@@ -12,9 +12,10 @@ const seed = async () => {
   // 插入 users 数据
   for (const user of users) {
     const { userId, name, email, password, role } = user;
+    const hashedPassword = await bcrypt.hash(user.password, 10);
     await db
       .insert(Users)
-      .values({ userId, name, email, password: password, role });
+      .values({ userId, name, email, password: hashedPassword, role });
   }
 
   // 插入 categories 数据

@@ -12,6 +12,7 @@ import { Link } from "@nextui-org/link";
 import { Button } from "@nextui-org/button";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { signout } from "@/lib/actions/authenticate";
 
 export default function Nav() {
   const pathname = usePathname();
@@ -55,7 +56,7 @@ export default function Nav() {
       </NavbarContent>
       <NavbarContent justify="end" className="invisible sm:visible">
         <NavbarItem>
-          <Button as={Link} color="primary" href="/admin/login" variant="flat">
+          <Button color="primary" onPress={() => signout()} variant="flat">
             注销
           </Button>
         </NavbarItem>
