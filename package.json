@@ -16,10 +16,11 @@
     "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^0.5.0",
     "@next/bundle-analyzer": "^14.1.0",
     "@nextui-org/react": "^2.2.9",
     "@react-stately/data": "^3.11.0",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "better-sqlite3": "^9.3.0",
     "dotenv": "^16.4.1",
     "drizzle-orm": "^0.29.3",
@@ -35,14 +36,14 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/better-sqlite3": "^7.6.9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.0.1",
-    "drizzle-kit": "^0.20.13",
+    "drizzle-kit": "^0.20.14",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
     "eslint-config-prettier": "^9.1.0",

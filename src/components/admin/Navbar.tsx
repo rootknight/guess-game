@@ -109,6 +109,7 @@ export default function Nav() {
           <Link
             onPress={() => {
               setIsMenuOpen(false);
+              signout();
             }}
             color="foreground"
             className="w-full"

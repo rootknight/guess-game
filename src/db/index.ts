@@ -5,4 +5,6 @@ import "dotenv";
 
 const sqlite = Database(process.env.DB_URL);
 
-export const db = drizzle(sqlite, { schema });
+const db = drizzle(sqlite, { schema });
+
+export default db;

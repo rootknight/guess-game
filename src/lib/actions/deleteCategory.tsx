@@ -1,6 +1,6 @@
 "use server";
 
-import { db } from "@/db/index";
+import db from "@/db/index";
 import { Categories } from "@/db/schema";
 import { SqliteError } from "better-sqlite3";
 import { eq } from "drizzle-orm";

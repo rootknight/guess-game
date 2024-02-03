@@ -1,4 +1,4 @@
-import LoginForm from "@/components/admin/login/LoginForm";
+import LoginForm from "@/components/auth/login/LoginForm";
 export const metadata = {
   title: "登陆",
 };

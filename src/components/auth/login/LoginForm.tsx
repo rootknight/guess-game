@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Link } from "@nextui-org/react";
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { authenticate } from "@/lib/actions/authenticate";
@@ -45,6 +45,9 @@ const LoginForm = () => {
           登录
         </Button>
       </div>
+      <Button variant="light" as={Link} href="/">
+        返回游戏
+      </Button>
     </form>
   );
 };

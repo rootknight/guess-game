@@ -1,4 +1,4 @@
-import { db } from "@/db/index";
+import db from "@/db/index";
 import { unstable_noStore as noStore } from "next/cache";
 import { Users, Categories, Words, Rooms } from "@/db/schema";
 import { and, count, desc, eq, like, or, sql } from "drizzle-orm";

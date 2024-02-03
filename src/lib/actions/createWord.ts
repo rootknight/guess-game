@@ -1,6 +1,6 @@
 "use server";
 
-import { db } from "@/db/index";
+import db from "@/db/index";
 import { Words } from "@/db/schema";
 import { SqliteError } from "better-sqlite3";
 import { z } from "zod";

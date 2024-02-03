@@ -1,25 +1,26 @@
 import NextAuth from "next-auth";
-import { authConfig } from "./auth.config";
-import GitHub from "next-auth/providers/GitHub";
+import authConfig from "@/auth.config";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import Credentials from "next-auth/providers/credentials";
+import GitHub from "next-auth/providers/GitHub";
 import { z } from "zod";
-import { db } from "@/db";
-import { Users } from "@/db/schema";
-import bcrypt from "bcrypt";
-import { eq } from "drizzle-orm";
+import bcrypt from "bcryptjs";
+import { getUser } from "@/lib/fetchers/getUser";
+import db from "@/db/index";
 
-async function getUser(email: string): Promise<any | undefined> {
-  try {
-    const user = await db.select().from(Users).where(eq(Users.email, email));
-    return user[0];
-  } catch (error) {
-    console.error("没有找到用户:", error);
-    throw new Error("没有找到用户");
-  }
-}
-
-export const { auth, signIn, signOut } = NextAuth({
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = NextAuth({
   ...authConfig,
+  adapter: DrizzleAdapter(db),
+  session: { strategy: "jwt" },
+  pages: {
+    signIn: "/admin/login",
+  },
+
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -30,7 +31,7 @@ export const { auth, signIn, signOut } = NextAuth({
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
           const user = await getUser(email);
-          if (!user) return null;
+          if (!user || !user.password) return null;
           const passwordsMatch = await bcrypt.compare(password, user.password);
           if (passwordsMatch) {
             return user;
