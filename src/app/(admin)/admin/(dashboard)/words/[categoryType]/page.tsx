@@ -24,29 +24,35 @@ const Page = async ({
   const currentPage = Number(searchParams?.page) || 1;
   const pageSize = Number(searchParams?.pageSize) || 10;
   const category = params.categoryType;
-  const resault = await fetchFilteredWords(
+  const WordsResault = await fetchFilteredWords(
     query,
     category,
     currentPage,
     pageSize
   );
+  const { words, resaultCount, resaultPages } = WordsResault.data;
 
-  const { words, resaultCount, resaultPages } = resault.data;
-
-  const response = await fetchCategories(category);
-  const currentCategory = response.data[0].title;
+  const CategoriesResault = await fetchCategories(category);
+  const categories = CategoriesResault.data.categories || [];
+  const currentCategory = categories[0];
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-row gap-2">
-        <Bread href={`/admin/words/${category}`} text={currentCategory!} />
+        <Bread
+          href={`/admin/words/${category}`}
+          text={currentCategory.title || ""}
+        />
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-3 items-end">
           <div className="flex gap-2">
             <Search placeholder="查找单词" />
           </div>
-          <CreateWord categoryId={response.data[0].id} />
+          <CreateWord
+            categoryId={currentCategory.id}
+            categoryTitle={currentCategory.title || ""}
+          />
         </div>
         <TableWords
           data={words!}

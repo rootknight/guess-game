@@ -8,51 +8,51 @@ import { SqliteError } from "better-sqlite3";
 export async function fetchCategories(query: string) {
   noStore();
   try {
-    const categories = await db
-      .select({
-        id: Categories.id,
-        type: Categories.type,
-        title: Categories.title,
-        description: Categories.description,
-        createdAt: Categories.createdAt,
-        updatedAt: Categories.updatedAt,
-        version: Categories.version,
-        createdUser: Users.name,
-        createdUserEmail: Users.email,
-        wordCount: count(Words.id),
-      })
-      .from(Categories)
-      .leftJoin(Users, eq(Categories.userId, Users.userId))
-      .leftJoin(Words, eq(Categories.id, Words.categoryId))
-      .where(
-        and(
-          or(
-            like(Categories.title, `%${query}%`),
-            like(Users.name, `%${query}%`),
-            like(Users.email, `%${query}%`),
-            like(Categories.type, `${query}`)
-          ),
-          eq(Categories.isDeleted, false)
+    const categories =
+      (await db
+        .select({
+          id: Categories.id,
+          type: Categories.type,
+          title: Categories.title,
+          description: Categories.description,
+          createdAt: Categories.createdAt,
+          updatedAt: Categories.updatedAt,
+          version: Categories.version,
+          createdUser: Users.name,
+          createdUserEmail: Users.email,
+          wordCount: count(Words.id),
+        })
+        .from(Categories)
+        .leftJoin(Users, eq(Categories.userId, Users.userId))
+        .leftJoin(Words, eq(Categories.id, Words.categoryId))
+        .where(
+          and(
+            or(
+              like(Categories.title, `%${query}%`),
+              like(Users.name, `%${query}%`),
+              like(Users.email, `%${query}%`),
+              like(Categories.type, `${query}`)
+            ),
+            eq(Categories.isDeleted, false)
+          )
         )
-      )
-      .groupBy(Categories.id)
-      .orderBy(desc(Categories.updatedAt));
+        .groupBy(Categories.id)
+        .orderBy(desc(Categories.updatedAt))) || [];
     return {
-      success: true,
-      status: 200,
-      data: categories,
+      code: 200,
+      msg: "获取分类成功",
+      data: { categories },
     };
   } catch (error: SqliteError | any) {
     return {
-      success: false,
-      status: 500,
-      data: [],
-      message: error.message,
+      code: 500,
+      msg: error.message,
+      data: {},
     };
   }
 }
 
-//获取单词
+//后台获取单词
 export async function fetchFilteredWords(
   query: string,
   category: string,
@@ -106,16 +106,62 @@ export async function fetchFilteredWords(
     const resaultPages: number = Math.ceil(resaultCount / pageSize);
 
     return {
-      success: true,
-      status: 200,
+      code: 200,
+      msg: true,
       data: { words, resaultCount, resaultPages },
     };
   } catch (error: SqliteError | any) {
     return {
-      success: false,
-      status: 500,
+      code: 500,
+      msg: error.message,
       data: {},
-      message: error.message,
+    };
+  }
+}
+
+//游戏页获取单词
+export async function getWordsByCategory(category: string) {
+  noStore();
+  try {
+    const words: any[] =
+      (await db
+        .select({
+          id: Words.id,
+          categoryId: Words.categoryId,
+          word: Words.word,
+          createdAt: Words.createdAt,
+          updatedAt: Words.updatedAt,
+          version: Words.version,
+          categoryType: Categories.type,
+          categoryTitle: Categories.title,
+        })
+        .from(Words)
+        .leftJoin(Categories, eq(Words.categoryId, Categories.id))
+        .where(
+          and(eq(Categories.type, `${category}`), eq(Words.isDeleted, false))
+        )) || [];
+
+    const wordsCount: number =
+      (
+        await db
+          .select({
+            resaultCount: count(Words.id),
+          })
+          .from(Words)
+          .leftJoin(Categories, eq(Words.categoryId, Categories.id))
+          .where(and(like(Categories.type, `${category}`)))
+      )[0].resaultCount || 0;
+
+    return {
+      code: 200,
+      msg: true,
+      data: { words, wordsCount },
+    };
+  } catch (error: SqliteError | any) {
+    return {
+      code: 500,
+      msg: error.message,
+      data: {},
     };
   }
 }

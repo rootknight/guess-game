@@ -14,8 +14,6 @@ export default auth((req) => {
   const isOnDashboard = nextUrl.pathname.startsWith("/admin");
   const isAuthing = nextUrl.pathname.startsWith("/auth");
 
-  console.log("Route", nextUrl.pathname, "isLoggedIn", isLoggedIn);
-
   //如果在admin且未登陆，重定向到登陆
   if (isOnDashboard && !isLoggedIn) {
     return Response.redirect(new URL("/auth/login", nextUrl));

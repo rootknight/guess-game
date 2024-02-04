@@ -15,7 +15,13 @@ import { createWord } from "@/lib/actions/createWord";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const CreateWord = ({ categoryId }: { categoryId: number }) => {
+const CreateWord = ({
+  categoryId,
+  categoryTitle,
+}: {
+  categoryId: number;
+  categoryTitle: string;
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialState: {
     code: number;
@@ -41,12 +47,14 @@ const CreateWord = ({ categoryId }: { categoryId: number }) => {
       <Modal isOpen={isOpen} onClose={onClose} backdrop="blur">
         <form action={dispatch}>
           <ModalContent>
-            <ModalHeader className="flex flex-col gap-1">添加单词</ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">
+              向 {categoryTitle} 添加单词
+            </ModalHeader>
             <ModalBody>
               <input type="hidden" name="categoryId" value={categoryId} />
               <Textarea
                 name="words"
-                label="单词只能包含中文、英文、数字；多个请用逗号、空格、换行分隔"
+                label="只能包含数字中英文；多个请用逗号、空格、换行分隔"
                 labelPlacement="outside"
                 maxRows={24}
                 placeholder="请输入..."

@@ -6,7 +6,7 @@ import { users, categories, words, rooms } from "./seed.json";
 import { Users, Categories, Words, Rooms } from "./schema";
 
 const seed = async () => {
-  const sqlite = Database("./database/guessgame.sqlite");
+  const sqlite = Database("./database/guess-game-dev.sqlite");
   const db = drizzle(sqlite, { schema });
   console.log("Seed start");
   // 插入 users 数据

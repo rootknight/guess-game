@@ -17,7 +17,7 @@ const ScoreBoard = ({
           height={64}
           alt="skip"
           priority={true}
-          className="opacity-30 hidden md:block"
+          className="opacity-30 hidden xl:block"
         />
         <Image
           src="/images/phoneSkip.png"
@@ -25,7 +25,7 @@ const ScoreBoard = ({
           height={64}
           alt="skip"
           priority={true}
-          className="opacity-30 md:hidden"
+          className="opacity-30 xl:hidden"
         />
       </div>
       <div className="fixed right-8 bottom-8 flex flex-col items-center gap-2">
@@ -35,14 +35,14 @@ const ScoreBoard = ({
           width={128}
           height={64}
           alt="skip"
-          className="opacity-30 hidden md:block"
+          className="opacity-30 hidden xl:block"
         />
         <Image
           src="/images/phoneSuccess.png"
           width={128}
           height={64}
           alt="skip"
-          className="opacity-30 md:hidden"
+          className="opacity-30 xl:hidden"
         />
       </div>
     </>

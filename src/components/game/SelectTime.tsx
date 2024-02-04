@@ -6,10 +6,11 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-} from "@nextui-org/modal";
-import { RadioGroup, Radio } from "@nextui-org/radio";
-import { Button } from "@nextui-org/button";
-import { Link } from "@nextui-org/link";
+  RadioGroup,
+  Radio,
+  Button,
+  Link,
+} from "@nextui-org/react";
 import { useState } from "react";
 
 const SelectTime = ({
@@ -33,18 +34,13 @@ const SelectTime = ({
     }
   };
 
-  const handleStartGame = () => {
-    // 进入全屏
-    enterFullscreen();
-  };
-
   return (
     <>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         placement="center"
-        size="xl"
+        size="md"
         hideCloseButton
       >
         <ModalContent>
@@ -69,6 +65,8 @@ const SelectTime = ({
               </ModalBody>
               <ModalFooter>
                 <Button
+                  fullWidth
+                  size="lg"
                   onPress={() => enterFullscreen()}
                   as={Link}
                   href={`/game?type=${type}&time=${radioValue}`}

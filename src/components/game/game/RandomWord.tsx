@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -7,83 +6,87 @@ import clsx from "clsx";
 import useThrottle from "@/hooks/useThrottle";
 import useCountdown from "@/hooks/useCountdown";
 import ScoreBoard from "@/components/game/game/ScoreBoard";
+import dayjs from "dayjs";
 
 const RandomWord = ({
   type,
   title,
-  selectedWord,
+  words,
   time,
   onStartCountDown,
+  count,
   isEnd,
+  isEarlyEnd,
+  sounds,
 }: {
   type: string;
   title: string;
-  selectedWord: string[];
+  words: string[];
   time: number;
   onStartCountDown: any;
+  count: number;
   isEnd: boolean;
+  isEarlyEnd: boolean;
+  sounds: any;
 }) => {
   const [backgroundColor, setBackgroundColor] = useState("bg-blue-500");
   const [displayedText, setDisplayedText] = useState<any>("");
   const router = useRouter();
 
   let extractedWord = useRef<string>("");
+  let extractedWords = useRef<string[]>([]);
   let successWords = useRef<string[]>([]);
   let skipWords = useRef<string[]>([]);
-  let extractedWords = useRef<string[]>([]);
 
   const [isExtractedOver, setIsExtractedOver] = useState<boolean>(false);
-
   const [readyCount, isReadyEnd] = useCountdown(6, true);
+
+  // 获取过去1小时的记录以过滤后使用
+  useEffect(() => {
+    const storedWordsJSON = localStorage.getItem("words");
+    const storedWords = JSON.parse(storedWordsJSON || "[]");
+    const nowUNIX = dayjs().valueOf();
+    const filteredWords = storedWords.filter(
+      (item: any) => nowUNIX - item.endTime < 3600000
+    );
+    const last1HourWords = filteredWords.reduce((result: any[], item: any) => {
+      result.push(...item.successWords, ...item.skipWords);
+      return result;
+    }, []);
+    extractedWords.current = last1HourWords;
+  }, []);
 
   //准备6秒
   useEffect(() => {
-    if (!isReadyEnd) {
-      setBackgroundColor("bg-amber-500");
-      if (readyCount >= 4) {
-        if (window.innerWidth >= 640) {
-          setDisplayedText("请猜词者背对屏幕");
-        } else if (window.innerWidth < 640) {
-          setDisplayedText("请横向举起屏幕");
-        }
-      } else {
-        const countDownSound = new Audio("/sounds/countdown.mp3");
-        countDownSound.play();
-        setDisplayedText(`准备: ${readyCount}`);
+    if (readyCount >= 4) {
+      //准备提示
+      if (window.innerWidth >= 1280) {
+        setDisplayedText("请猜词者背对屏幕");
+      } else if (window.innerWidth < 1280) {
+        setDisplayedText("请横向举起屏幕");
       }
-    } else {
-      const countDownEndSound = new Audio("/sounds/countdownend.mp3");
-      countDownEndSound.play();
+    } else if (readyCount <= 3 && readyCount > 0) {
+      //准备倒计时
+      sounds.countDownSound.play();
+      setDisplayedText(`准备: ${readyCount}`);
+    }
+
+    //准备结束
+    if (isReadyEnd) {
+      sounds.countDownEndSound.play();
       navigator.vibrate(100); // 震动100毫秒
       getRandomWord();
       onStartCountDown(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [readyCount, isReadyEnd]);
-
-  // 获取过去1小时的记录以过滤后使用
-  useEffect(() => {
-    const storedextractedWords = localStorage.getItem("extractedWords");
-    const parsedextractedWords =
-      storedextractedWords !== null ? JSON.parse(storedextractedWords) : [];
-
-    const currentTime = Date.now();
-    const oneHourInMillis = 60 * 60 * 1000; // 1小时的毫秒数
-
-    // 过滤出过去1小时内的数据
-    const filteredextractedWords = parsedextractedWords.filter((word: any) => {
-      // const wordTimestamp = new Date(word.timestamp).getTime();
-      return currentTime - word.timestamp <= oneHourInMillis;
-    });
-    // 更新状态
-    extractedWords.current = filteredextractedWords;
-  }, []);
 
   // 从剩余可选词组随机抽词
   const getRandomWord = () => {
     setBackgroundColor("bg-blue-500");
-    const getRandomWordSound = new Audio("/sounds/getRandomWord.mp3");
-    getRandomWordSound.play();
-    const remainingWords = selectedWord.filter(
+    sounds.getRandomWordSound.play();
+    // 从剩余可选词组中随机抽取一个
+    const remainingWords = words.filter(
       (word) => !extractedWords.current.includes(word)
     );
     if (remainingWords.length > 0) {
@@ -92,10 +95,12 @@ const RandomWord = ({
       setDisplayedText(remainingWords[randomIndex]);
     } else {
       // 如果所有词都已选完，可以进行一些处理，例如重新洗牌词汇数组
-      setDisplayedText("egg:所有词都抽完了😎");
-      setIsExtractedOver(() => {
-        return true;
-      });
+      setDisplayedText("所有词都抽完了🤣");
+      setTimeout(() => {
+        setIsExtractedOver(() => {
+          return true;
+        });
+      }, 2000);
     }
   };
 
@@ -108,25 +113,22 @@ const RandomWord = ({
 
   const onSuccess = (word: string) => {
     // 播放成功音效
-    const successSound = new Audio("/sounds/success.mp3");
-    successSound.play();
+    sounds.successSound.play();
     //设置背景颜色为绿色
     setDisplayedText("正确");
     setBackgroundColor("bg-green-500");
     successWords.current = [...successWords.current, word];
-    // console.log(successWords.current);
+    extractedWords.current = [...extractedWords.current, word];
   };
 
   const onSkip = (word: string) => {
     // 播放跳过音效
-    const skipSound = new Audio("/sounds/skip.mp3");
-    skipSound.play();
+    sounds.skipSound.play();
     //设置背景颜色为红色
     setDisplayedText("跳过");
     setBackgroundColor("bg-rose-500");
     skipWords.current = [...skipWords.current, word];
-
-    // console.log(skipWords.current);
+    extractedWords.current = [...extractedWords.current, word];
   };
 
   // 键盘动作
@@ -140,9 +142,9 @@ const RandomWord = ({
     }
   };
 
-  let isForward = useRef<boolean>(true);
-  let isReset = useRef<boolean>(true);
-  let isBackward = useRef<boolean>(true);
+  const isForward = useRef<boolean>(true);
+  const isReset = useRef<boolean>(true);
+  const isBackward = useRef<boolean>(true);
 
   //翻转手机动作
   const handleOrientation = (event: any) => {
@@ -215,40 +217,36 @@ const RandomWord = ({
 
   //结束后保存记录到LocalStorage
   useEffect(() => {
-    if (isEnd || isExtractedOver) {
+    if (isEnd || isExtractedOver || isEarlyEnd) {
       // 播放gameover音效
-      const gameOverSound = new Audio("/sounds/gameover.mp3");
-      gameOverSound.play();
+      sounds.countDownEndSound.play();
       exitFullscreen();
       //将抽取过的词存入LocalStorage
       // 获取之前的数据
-      const storedSelectedWords = localStorage.getItem("selectedWords");
-      const parsedSelectedWords =
-        storedSelectedWords !== null ? JSON.parse(storedSelectedWords) : [];
+      const storedwords = localStorage.getItem("words");
+      const parsedwords = storedwords !== null ? JSON.parse(storedwords) : [];
       // 新的数据
       const newData = {
         title: title,
         type: type,
-        time: time,
+        time: isEarlyEnd ? time - count : time,
         endTime: Date.now(),
         successWords: successWords.current,
         skipWords: skipWords.current,
       };
       // 追加新的数据
-      const updatedSelectedWords = [newData, ...parsedSelectedWords];
+      const updatedwordss = [newData, ...parsedwords];
       // 保存到localStorage中
-      localStorage.setItem(
-        "selectedWords",
-        JSON.stringify(updatedSelectedWords)
-      );
+      localStorage.setItem("words", JSON.stringify(updatedwordss));
       router.push("/settlement");
     }
-  }, [isEnd, isExtractedOver]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEnd, isEarlyEnd, isExtractedOver]);
 
   return (
     <div
       className={clsx(
-        "h-full w-full flex flex-col justify-center p-4 rounded-lg",
+        "h-full w-full flex flex-col justify-center p-4",
         backgroundColor
       )}
     >

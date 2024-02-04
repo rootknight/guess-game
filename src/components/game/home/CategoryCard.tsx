@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/react";
 import { useDisclosure } from "@nextui-org/use-disclosure";
 import SelectTime from "@/components/game/SelectTime";
 
-export default function SelectWords({
+export default function CategoryCard({
   title,
   type,
 }: {

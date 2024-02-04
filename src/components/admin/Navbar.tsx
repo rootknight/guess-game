@@ -8,8 +8,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
 } from "@nextui-org/navbar";
-import { Link } from "@nextui-org/link";
-import { Button } from "@nextui-org/button";
+import { Link, Button } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { signout } from "@/lib/actions/authenticate";
@@ -27,6 +26,9 @@ export default function Nav() {
     >
       <NavbarBrand>
         <p className="font-bold text-inherit">GUSSGAME</p>
+        <Button isIconOnly as={Link} href="/" target="_blank" variant="light">
+          🎲
+        </Button>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem isActive={pathname === "/admin/words"}>
