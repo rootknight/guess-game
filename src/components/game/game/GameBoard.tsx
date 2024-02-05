@@ -23,7 +23,7 @@ const GameBoard = ({
   useEffect(() => {
     setSounds({
       countDownSound: new Audio("/sounds/countdown.mp3"),
-      countDownEndSound: new Audio("/sounds/countdownend.mp3"),
+      countDownEndSound: new Audio("/sounds/countdownEnd.mp3"),
       getRandomWordSound: new Audio("/sounds/getRandomWord.mp3"),
       successSound: new Audio("/sounds/success.mp3"),
       skipSound: new Audio("/sounds/skip.mp3"),

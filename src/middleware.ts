@@ -13,6 +13,7 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
   const isOnDashboard = nextUrl.pathname.startsWith("/admin");
   const isAuthing = nextUrl.pathname.startsWith("/auth");
+  console.log("isLoggedIn", isLoggedIn);
 
   //如果在admin且未登陆，重定向到登陆
   if (isOnDashboard && !isLoggedIn) {

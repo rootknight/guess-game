@@ -109,13 +109,9 @@ export default function Nav() {
         </NavbarMenuItem>
         <NavbarMenuItem key="signout">
           <Link
-            onPress={() => {
-              setIsMenuOpen(false);
-              signout();
-            }}
+            onPress={() => signout()}
             color="foreground"
             className="w-full"
-            href="/admin/login"
             size="lg"
           >
             注销

@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
+// import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
@@ -14,10 +14,10 @@ export const {
   signOut,
 } = NextAuth({
   ...authConfig,
-  adapter: DrizzleAdapter(db),
+  // adapter: DrizzleAdapter(db),
   session: { strategy: "jwt" },
   pages: {
-    signIn: "/admin/login",
+    signIn: "/auth/login",
   },
 
   providers: [
