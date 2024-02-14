@@ -1,6 +1,5 @@
 "use client";
 import { Input } from "@nextui-org/react";
-import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";

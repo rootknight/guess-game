@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
-
 export const publicRoutes = ["/game", "/settlement", "/records", "/auth/login"];
 export const authRoutes = ["/auth/login"];
 export const apiAuthPrefix = "/api/auth";
@@ -28,7 +27,7 @@ export default auth((req) => {
     return Response.redirect(new URL("/admin/words", nextUrl));
   }
 
-  return null;
+  // return null;
 });
 
 export const config = {

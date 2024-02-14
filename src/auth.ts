@@ -1,11 +1,9 @@
 import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { getUser } from "@/lib/fetchers/getUser";
-import db from "@/db/index";
 
 export const {
   handlers: { GET, POST },
@@ -14,7 +12,6 @@ export const {
   signOut,
 } = NextAuth({
   ...authConfig,
-  adapter: DrizzleAdapter(db),
   session: { strategy: "jwt" },
   pages: {
     signIn: "/admin/login",

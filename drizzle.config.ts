@@ -6,6 +6,6 @@ export default {
   out: "./drizzle",
   driver: "better-sqlite",
   dbCredentials: {
-    url: "./database/guess-game-dev.sqlite",
+    url: "./database/guess-game-prod.sqlite",
   },
 } satisfies Config;

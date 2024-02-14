@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { users, categories, words, rooms } from "./seed.json";
 import { Users, Categories, Words, Rooms } from "./schema";
 
-const seed = async () => {
+const seedDev = async () => {
   const sqlite = Database("./database/guess-game-dev.sqlite");
   const db = drizzle(sqlite, { schema });
   console.log("Seed start");
@@ -41,4 +41,20 @@ const seed = async () => {
   console.log("Seed done");
 };
 
-seed();
+const seedProd = async () => {
+  const sqlite = Database("./database/guess-game-prod.sqlite");
+  const db = drizzle(sqlite, { schema });
+  console.log("Seed start");
+  // 插入 users 数据
+  for (const user of users) {
+    const { userId, name, email, password, role } = user;
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    await db
+      .insert(Users)
+      .values({ userId, name, email, password: hashedPassword, role });
+  }
+
+  console.log("Seed done");
+};
+
+seedProd();

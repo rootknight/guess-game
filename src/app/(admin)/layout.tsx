@@ -16,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh" className="light">
-      <body className="font-sans antialiased w-full h-dvh">
+    <html lang="zh">
+      <body className="font-sans antialiased w-full h-dvh text-foreground">
         <Providers>{children}</Providers>
       </body>
     </html>

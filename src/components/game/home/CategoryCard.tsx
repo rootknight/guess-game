@@ -7,9 +7,11 @@ import SelectTime from "@/components/game/SelectTime";
 export default function CategoryCard({
   title,
   type,
+  desc,
 }: {
   title: string;
   type: string;
+  desc: string;
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
@@ -25,6 +27,7 @@ export default function CategoryCard({
         onOpenChange={onOpenChange}
         title={title}
         type={type}
+        desc={desc}
       />
     </div>
   );

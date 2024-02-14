@@ -1,7 +1,6 @@
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { Link } from "@nextui-org/link";
 import { Button } from "@nextui-org/button";
-import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import UpdateCategory from "@/components/admin/words/UpdateCategory";
 
 const CategoryCard = ({

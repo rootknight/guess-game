@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh">
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased h-dvh text-foreground">
         <Providers>{children}</Providers>
       </body>
     </html>

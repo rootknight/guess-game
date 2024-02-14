@@ -69,6 +69,7 @@ function Page() {
             onOpenChange={onOpenChange}
             title={`再玩一局 ${title}`}
             type={type}
+            desc={""}
           />
         </footer>
       </div>

@@ -18,11 +18,13 @@ const SelectTime = ({
   onOpenChange,
   type,
   title,
+  desc,
 }: {
   isOpen: boolean;
   onOpenChange: any;
   type: string;
   title: string;
+  desc: string;
 }) => {
   const [radioValue, setRadioValue] = useState("60");
 
@@ -42,17 +44,17 @@ const SelectTime = ({
         placement="center"
         size="md"
         hideCloseButton
+        className="bg-white dark:bg-slate-900 dark:text-white"
       >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-2 text-gray-800">
-                {title}
-              </ModalHeader>
+              <ModalHeader className="flex flex-col gap-2">{title}</ModalHeader>
               <ModalBody>
+                <p className="pb-4">{desc}</p>
                 <RadioGroup
                   orientation="horizontal"
-                  label="请选择游戏时长"
+                  aria-label="游戏时长"
                   defaultValue="60"
                   onValueChange={setRadioValue}
                 >
@@ -67,7 +69,10 @@ const SelectTime = ({
                 <Button
                   fullWidth
                   size="lg"
-                  onPress={() => enterFullscreen()}
+                  onPress={() => {
+                    onClose();
+                    enterFullscreen();
+                  }}
                   as={Link}
                   href={`/game?type=${type}&time=${radioValue}`}
                 >
