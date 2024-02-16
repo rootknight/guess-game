@@ -23,6 +23,7 @@
     "@react-stately/data": "^3.11.1",
     "bcryptjs": "^2.4.3",
     "better-sqlite3": "^9.4.1",
+    "clsx": "^2.1.0",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.4",
     "drizzle-orm": "^0.29.3",

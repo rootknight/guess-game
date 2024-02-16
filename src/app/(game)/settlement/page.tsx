@@ -28,7 +28,14 @@ function Page() {
   return (
     <div className="w-full p-4 flex justify-center">
       <div className="w-full max-w-[1024px] flex flex-col gap-4 relative">
-        <section className=" w-32 h-32 -translate-x-16 top-4 md:w-48 md:h-48 md:top-4 rounded-full border-dashed border-4 border-yellow-500 absolute left-1/2 md:-translate-x-24 bg-white shadow-lg flex flex-col justify-center items-center md:gap-2">
+        <section
+          className="
+          w-32 h-32 
+          absolute left-1/2 -translate-x-16 top-4
+          md:w-48 md:h-48 md:top-4 md:-translate-x-24 md:gap-2
+          rounded-full border-dashed border-4 border-yellow-500 bg-white shadow-lg
+          flex flex-col justify-center items-center"
+        >
           <p className="text-3xl font-bold md:text-4xl text-orange-500">
             得分{successWords?.length || 0}
           </p>

@@ -29,8 +29,8 @@ const RandomWord = ({
   isEarlyEnd: boolean;
   sounds: any;
 }) => {
-  const [backgroundColor, setBackgroundColor] = useState("bg-blue-500");
-  const [displayedText, setDisplayedText] = useState<any>("");
+  const [bgColor, setBgColor] = useState("bg-blue-500");
+  const [disText, setDisText] = useState<any>("");
   const router = useRouter();
 
   let extractedWord = useRef<string>("");
@@ -61,14 +61,14 @@ const RandomWord = ({
     if (readyCount >= 4) {
       //准备提示
       if (window.innerWidth >= 1280) {
-        setDisplayedText("请猜词者背对屏幕");
+        setDisText("请猜词者背对屏幕");
       } else if (window.innerWidth < 1280) {
-        setDisplayedText("请横向举起屏幕");
+        setDisText("请横向举起屏幕");
       }
     } else if (readyCount <= 3 && readyCount > 0) {
       //准备倒计时
       sounds.countDownSound.play();
-      setDisplayedText(`准备: ${readyCount}`);
+      setDisText(`准备: ${readyCount}`);
     }
 
     //准备结束
@@ -83,7 +83,7 @@ const RandomWord = ({
 
   // 从剩余可选词组随机抽词
   const getRandomWord = () => {
-    setBackgroundColor("bg-blue-500");
+    setBgColor("bg-blue-500");
     sounds.getRandomWordSound.play();
     // 从剩余可选词组中随机抽取一个
     const remainingWords = words.filter(
@@ -92,10 +92,10 @@ const RandomWord = ({
     if (remainingWords.length > 0) {
       const randomIndex = Math.floor(Math.random() * remainingWords.length);
       extractedWord.current = remainingWords[randomIndex];
-      setDisplayedText(remainingWords[randomIndex]);
+      setDisText(remainingWords[randomIndex]);
     } else {
       // 如果所有词都已选完，可以进行一些处理，例如重新洗牌词汇数组
-      setDisplayedText("所有词都抽完了🤣");
+      setDisText("所有词都抽完了🤣");
       setTimeout(() => {
         setIsExtractedOver(() => {
           return true;
@@ -115,8 +115,8 @@ const RandomWord = ({
     // 播放成功音效
     sounds.successSound.play();
     //设置背景颜色为绿色
-    setDisplayedText("正确");
-    setBackgroundColor("bg-green-500");
+    setDisText("正确");
+    setBgColor("bg-green-500");
     successWords.current = [...successWords.current, word];
     extractedWords.current = [...extractedWords.current, word];
   };
@@ -125,8 +125,8 @@ const RandomWord = ({
     // 播放跳过音效
     sounds.skipSound.play();
     //设置背景颜色为红色
-    setDisplayedText("跳过");
-    setBackgroundColor("bg-rose-500");
+    setDisText("跳过");
+    setBgColor("bg-rose-500");
     skipWords.current = [...skipWords.current, word];
     extractedWords.current = [...extractedWords.current, word];
   };
@@ -247,12 +247,10 @@ const RandomWord = ({
     <div
       className={clsx(
         "h-full w-full flex flex-col justify-center p-4",
-        backgroundColor
+        bgColor
       )}
     >
-      <p className="text-white text-6xl md:text-8xl text-center">
-        {displayedText}
-      </p>
+      <p className="text-white text-6xl md:text-8xl text-center">{disText}</p>
       <ScoreBoard
         successWords={successWords.current}
         skipWords={skipWords.current}
