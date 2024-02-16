@@ -1,9 +1,8 @@
-import { Button } from "@nextui-org/button";
 import CreateWord from "@/components/admin/words/categoryType/CreateWord";
 import Search from "@/components/admin/Search";
 import TableWords from "@/components/admin/words/categoryType/TableWords";
 import { fetchFilteredWords, fetchCategories } from "@/lib/fetchers/data";
-import Bread from "../../../../../../components/admin/words/categoryType/CategoryBread";
+import Bread from "@/components/admin/words/categoryType/CategoryBread";
 
 export const metadata = {
   title: "词组管理",

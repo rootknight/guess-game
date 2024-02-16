@@ -3,7 +3,7 @@
 
 import SelectTime from "@/components/game/SelectTime";
 import { Button, useDisclosure, Link } from "@nextui-org/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 function Page() {
