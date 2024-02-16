@@ -1,0 +1,10 @@
+version: "3"
+services:
+  web:
+    build:
+      context: https://github.com/rootknight/guess-game.git
+      dockerfile: Dockerfile
+    container_name: guess-game
+    restart: always
+    ports:
+      - 8089:3000
