@@ -63,7 +63,7 @@ const RandomWord = ({
       if (window.innerWidth >= 1280) {
         setDisText("请猜词者背对屏幕");
       } else if (window.innerWidth < 1280) {
-        setDisText("请横向举起屏幕");
+        setDisText("请横向举在头顶");
       }
     } else if (readyCount <= 3 && readyCount > 0) {
       //准备倒计时
@@ -142,49 +142,49 @@ const RandomWord = ({
     }
   };
 
-  const isForward = useRef<boolean>(true);
-  const isReset = useRef<boolean>(true);
-  const isBackward = useRef<boolean>(true);
+  const forToggle = useRef<boolean>(true);
+  const resToggle = useRef<boolean>(false);
+  const bacToggle = useRef<boolean>(true);
 
   //翻转手机动作
   const handleOrientation = (event: any) => {
     const gamma = Math.round(event.gamma);
 
     // 向前翻转
-    if (!isForward.current && gamma > 0 && gamma <= 45) {
-      isForward.current = true;
-      isReset.current = false;
-      isBackward.current = true;
+    if (forToggle.current && gamma > 0 && gamma <= 45) {
       navigator.vibrate(100); // 震动200毫秒
       onSuccess(extractedWord.current);
+      forToggle.current = false;
+      resToggle.current = true;
+      bacToggle.current = false;
     }
 
     //翻转回原位
     if (
-      !isReset.current &&
+      resToggle.current &&
       ((gamma >= 55 && gamma <= 90) || (gamma >= -90 && gamma <= -55))
     ) {
-      isForward.current = true;
-      isReset.current = false;
-      isBackward.current = true;
-      // navigator.vibrate(100);
       getRandomWord();
+      forToggle.current = true;
+      resToggle.current = false;
+      bacToggle.current = true;
+      // navigator.vibrate(100);
     }
 
     // 向后翻转
-    if (!isBackward.current && gamma >= -45 && gamma < 0) {
-      isForward.current = true;
-      isReset.current = false;
-      isBackward.current = true;
+    if (bacToggle.current && gamma >= -45 && gamma < 0) {
       navigator.vibrate(100); // 震动200毫秒
       onSkip(extractedWord.current);
+      forToggle.current = false;
+      resToggle.current = true;
+      bacToggle.current = false;
     }
 
     // 处理角度0
     if (gamma === 0) {
-      isForward.current = true;
-      isReset.current = false;
-      isBackward.current = true;
+      forToggle.current = false;
+      resToggle.current = true;
+      bacToggle.current = false;
     }
   };
 
@@ -252,8 +252,8 @@ const RandomWord = ({
     >
       <p className="text-white text-6xl md:text-8xl text-center">{disText}</p>
       <ScoreBoard
-        successWords={successWords.current}
-        skipWords={skipWords.current}
+        successNumber={successWords.current.length}
+        skipNumber={skipWords.current.length}
       />
     </div>
   );
