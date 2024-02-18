@@ -15,4 +15,5 @@ export default {
     // },
   },
   providers: [],
+  trustHost: true,
 } satisfies NextAuthConfig;
