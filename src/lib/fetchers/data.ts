@@ -3,23 +3,25 @@ import { unstable_noStore as noStore } from "next/cache";
 import { Users, Categories, Words, Rooms } from "@/db/schema";
 import { and, count, desc, eq, like, or, sql } from "drizzle-orm";
 import { SqliteError } from "better-sqlite3";
+import "dotenv";
 
 //获取分类
 export async function fetchCategories(query: string) {
   noStore();
   try {
-    const categories =
+    const categoriesSQL =
       (await db
         .select({
           id: Categories.id,
           type: Categories.type,
           title: Categories.title,
+          icon: Categories.icon,
           description: Categories.description,
           createdAt: Categories.createdAt,
           updatedAt: Categories.updatedAt,
           version: Categories.version,
           createdUser: Users.name,
-          createdUserEmail: Users.email,
+          // createdUserEmail: Users.email,
           wordCount: count(Words.id),
         })
         .from(Categories)
@@ -38,6 +40,13 @@ export async function fetchCategories(query: string) {
         )
         .groupBy(Categories.id)
         .orderBy(desc(Categories.updatedAt))) || [];
+
+    const categories = categoriesSQL.map((item) => {
+      const { icon, ...rest } = item;
+      const iconUrl = `${process.env.BASE_URL}/_next/image?url=/images/categoryIcon/${icon}&w=64&q=100`;
+      return { ...rest, icon, iconUrl };
+    });
+
     return {
       code: 200,
       msg: "获取分类成功",

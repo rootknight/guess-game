@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "ba8454a5-2ac9-4b2e-9a2c-a539d1f2c63f",
+  "id": "40d554bd-b543-4fa1-b6c1-0ea036b62b6d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "categories": {
@@ -23,6 +23,13 @@
         },
         "title": {
           "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "iconPath": {
+          "name": "iconPath",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

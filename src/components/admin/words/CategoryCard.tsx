@@ -2,10 +2,12 @@ import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { Link } from "@nextui-org/link";
 import { Button } from "@nextui-org/button";
 import UpdateCategory from "@/components/admin/words/UpdateCategory";
+import CardBgSvg from "@/components/CardBgSvg";
 
 const CategoryCard = ({
   id,
   title,
+  iconUrl,
   categoryType,
   createdUser,
   wordCount,
@@ -13,6 +15,7 @@ const CategoryCard = ({
 }: {
   id: number;
   title: string;
+  iconUrl: string;
   categoryType: string;
   createdUser: string;
   wordCount: number;
@@ -20,8 +23,8 @@ const CategoryCard = ({
 }) => {
   return (
     <Card shadow="md" isBlurred className="w-full min-w-fit">
-      <CardHeader className="flex gap-2 flex-row">
-        <SvgCard />
+      <CardHeader className="flex gap-2 items-start">
+        <CardBgSvg title={title} iconUrl={iconUrl} width={80} height={80} />
         <div className="flex flex-col items-start">
           <p className="text-md">{title}</p>
           <p className="text-md">{categoryType}</p>

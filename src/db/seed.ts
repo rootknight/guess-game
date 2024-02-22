@@ -20,8 +20,10 @@ const seedDev = async () => {
 
   // 插入 categories 数据
   for (const category of categories) {
-    const { type, title, description, userId } = category;
-    await db.insert(Categories).values({ type, title, description, userId });
+    const { type, title, icon, description, userId } = category;
+    await db
+      .insert(Categories)
+      .values({ type, title, icon, description, userId });
   }
 
   // 插入 wrods 数据
@@ -57,4 +59,4 @@ const seedProd = async () => {
   console.log("Seed done");
 };
 
-seedProd();
+seedDev();

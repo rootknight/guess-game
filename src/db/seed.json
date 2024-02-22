@@ -12,30 +12,35 @@
     {
       "type": "hot",
       "title": "热门",
+      "icon": "hot.png",
       "description": "当下最流行的词组",
       "userId": "b0edb5f4-df84-46bc-9503-de9d1974b8e9"
     },
     {
       "type": "idiom",
       "title": "中国成语",
+      "icon": "idiom.png",
       "description": "常见中国成语",
       "userId": "b0edb5f4-df84-46bc-9503-de9d1974b8e9"
     },
     {
       "type": "necessities",
       "title": "日用品",
+      "icon": "necessities.png",
       "description": "常见日用品",
       "userId": "b0edb5f4-df84-46bc-9503-de9d1974b8e9"
     },
     {
       "type": "animal",
       "title": "动物",
+      "icon": "animal.png",
       "description": "常见动物",
       "userId": "b0edb5f4-df84-46bc-9503-de9d1974b8e9"
     },
     {
       "type": "bible",
       "title": "圣经",
+      "icon": "bible.png",
       "description": "圣经中的的人物或事件",
       "userId": "b0edb5f4-df84-46bc-9503-de9d1974b8e9"
     }

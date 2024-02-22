@@ -1,27 +1,37 @@
 "use client";
 
-import { Button } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+} from "@nextui-org/react";
 import { useDisclosure } from "@nextui-org/use-disclosure";
 import SelectTime from "@/components/game/SelectTime";
+import CardBgSvg from "@/components/CardBgSvg";
 
 export default function CategoryCard({
   title,
+  iconUrl,
   type,
   desc,
 }: {
   title: string;
+  iconUrl: string;
   type: string;
   desc: string;
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
-    <div>
-      <Button
+    <div className="h-full w-full">
+      <Card
+        isPressable
         onPress={onOpen}
-        className="h-unit-4xl w-full text-2xl bg-gradient-to-tl from-pink-500 to-yellow-500 text-white shadow-lg"
+        className="rounded-15 bg-transparent w-full"
       >
-        {title}
-      </Button>
+        <CardBgSvg title={title} iconUrl={iconUrl} />
+      </Card>
       <SelectTime
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -29,6 +39,7 @@ export default function CategoryCard({
         type={type}
         desc={desc}
       />
+      {/* <CardBgSvg></CardBgSvg> */}
     </div>
   );
 }

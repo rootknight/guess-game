@@ -2,6 +2,7 @@ CREATE TABLE `categories` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`type` text,
 	`title` text,
+	`iconPath` text,
 	`description` text NOT NULL,
 	`userId` text NOT NULL,
 	`createdAt` integer DEFAULT CURRENT_TIMESTAMP,

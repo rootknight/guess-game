@@ -34,6 +34,7 @@ export const Categories = sqliteTable("categories", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   type: text("type").unique(),
   title: text("title"),
+  icon: text("icon"),
   description: text("description").notNull(),
   userId: text("userId")
     .notNull()

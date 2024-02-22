@@ -35,6 +35,7 @@ const Page = async ({
               key={category.id}
               id={category.id}
               title={category.title!}
+              iconUrl={category.iconUrl}
               categoryType={category.type!}
               createdUser={category.createdUser!}
               wordCount={category.wordCount}
