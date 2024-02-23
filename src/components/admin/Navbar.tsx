@@ -25,7 +25,7 @@ export default function Nav() {
       isBordered
     >
       <NavbarBrand>
-        <p className="font-bold text-inherit">GUSSGAME</p>
+        <p className="font-bold text-inherit">你猜 仪表盘</p>
         <Button isIconOnly as={Link} href="/" target="_blank" variant="light">
           🎲
         </Button>

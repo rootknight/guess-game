@@ -17,6 +17,7 @@ const insertSchema = createInsertSchema(Categories, {
     .regex(/^[a-zA-Z]+$/, { message: "只能包含字母" })
     .min(2, { message: "至少包含两个字符" })
     .max(20, { message: "最多包含20个字符" }),
+  icon: z.string(),
   description: z
     .string()
     .min(2, { message: "至少包含两个字符" })
@@ -30,6 +31,7 @@ export async function createCategory(prevState: any, formData: FormData) {
   const parse = insertSchema.safeParse({
     title: formData.get("title"),
     type: formData.get("type"),
+    icon: formData.get("icon"),
     description: formData.get("description"),
     userId: formData.get("userId"),
   });
@@ -42,18 +44,20 @@ export async function createCategory(prevState: any, formData: FormData) {
       data: {
         titleErrors: err.title?._errors.join("\n"),
         typeErrors: err.type?._errors.join("\n"),
+        iconErrors: err.icon?._errors.join("\n"),
         descriptionErrors: err.description?._errors.join("\n"),
         userIdErrors: err.userId?._errors.join("\n"),
       },
     };
   }
-  const { title, type, description, userId } = parse.data;
+  const { title, type, icon, description, userId } = parse.data;
 
   try {
     console.log("Inserting category data...");
     await db.insert(Categories).values({
       title,
       type,
+      icon,
       description,
       userId,
     });

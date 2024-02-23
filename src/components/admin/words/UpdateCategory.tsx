@@ -5,25 +5,28 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-} from "@nextui-org/modal";
-import { Button } from "@nextui-org/button";
+  Button,
+  Input,
+  Textarea,
+  Image,
+} from "@nextui-org/react";
 import { useDisclosure } from "@nextui-org/use-disclosure";
-import { Input } from "@nextui-org/input";
-import { Textarea } from "@nextui-org/input";
 import { useFormState } from "react-dom";
 import { updateCategory } from "@/lib/actions/updateCategory";
 import { deleteCategory } from "@/lib/actions/deleteCategory";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const UpdateCategory = ({
   id,
   title,
+  icon,
   categoryType,
   description,
 }: {
   id: number;
   title: string;
+  icon: string;
   categoryType: string;
   description: string;
 }) => {
@@ -35,6 +38,7 @@ const UpdateCategory = ({
   const userId = "b0edb5f4-df84-46bc-9503-de9d1974b8e9";
   const [state, dispatch] = useFormState(updateCategory, initialState);
   const router = useRouter();
+  const [previewImage, setPreviewImage] = useState(icon);
 
   useEffect(() => {
     if (state?.code === 200) {
@@ -43,6 +47,20 @@ const UpdateCategory = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
+
+  // 预览图片
+  const previewImageHandler = (event: any) => {
+    const files = event.target.files;
+    if (files && files[0]) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // 将读取的文件以base64格式设置为previewImage
+        setPreviewImage(reader.result as string);
+      };
+      // 读取文件并转换成base64
+      reader.readAsDataURL(files[0]);
+    }
+  };
 
   return (
     <div>
@@ -56,6 +74,7 @@ const UpdateCategory = ({
             <ModalBody>
               <input type="hidden" name="userId" value={userId} />
               <input type="hidden" name="categoryId" value={id} />
+              <input type="hidden" name="icon" value={previewImage} />
               <Input
                 type="text"
                 aria-label="title"
@@ -82,6 +101,18 @@ const UpdateCategory = ({
                   state?.data?.typeErrors || state?.data?.typeIsExist
                 }
               />
+              <div className="flex flex-row gap-2 items-center">
+                {previewImage && (
+                  <Image src={previewImage} alt="icon" width={48} />
+                )}
+                <input
+                  type="file"
+                  aria-label="icon"
+                  accept="/image/*"
+                  onChange={previewImageHandler}
+                  required
+                />
+              </div>
               <Textarea
                 name="description"
                 label="描述"

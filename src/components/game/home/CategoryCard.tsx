@@ -13,12 +13,12 @@ import CardBgSvg from "@/components/CardBgSvg";
 
 export default function CategoryCard({
   title,
-  iconUrl,
+  icon,
   type,
   desc,
 }: {
   title: string;
-  iconUrl: string;
+  icon: string;
   type: string;
   desc: string;
 }) {
@@ -30,7 +30,7 @@ export default function CategoryCard({
         onPress={onOpen}
         className="rounded-15 bg-transparent w-full"
       >
-        <CardBgSvg title={title} iconUrl={iconUrl} />
+        <CardBgSvg title={title} icon={icon} />
       </Card>
       <SelectTime
         isOpen={isOpen}

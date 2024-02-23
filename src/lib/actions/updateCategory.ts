@@ -18,6 +18,7 @@ const updateSchema = createInsertSchema(Categories, {
     .regex(/^[a-zA-Z]+$/, { message: "只能包含字母" })
     .min(2, { message: "至少包含两个字符" })
     .max(20, { message: "最多包含20个字符" }),
+  icon: z.string(),
   description: z
     .string()
     .min(2, { message: "至少包含两个字符" })
@@ -25,15 +26,14 @@ const updateSchema = createInsertSchema(Categories, {
   userId: z.string(),
 });
 
-//创建分类
+//修改分类
 export async function updateCategory(prevState: any, formData: FormData) {
-  console.log(typeof formData.get("categoryId"));
-
   //使用Zod验证FormData
   const parse = updateSchema.safeParse({
     id: Number(formData.get("categoryId")),
     title: formData.get("title"),
     type: formData.get("type"),
+    icon: formData.get("icon"),
     description: formData.get("description"),
     userId: formData.get("userId"),
   });
@@ -46,12 +46,13 @@ export async function updateCategory(prevState: any, formData: FormData) {
       data: {
         titleErrors: err.title?._errors.join("\n"),
         typeErrors: err.type?._errors.join("\n"),
+        iconErrors: err.icon?._errors.join("\n"),
         descriptionErrors: err.description?._errors.join("\n"),
         userIdErrors: err.userId?._errors.join("\n"),
       },
     };
   }
-  const { id, title, type, description, userId } = parse.data;
+  const { id, title, type, icon, description, userId } = parse.data;
 
   try {
     console.log("Updating category data...");
@@ -61,6 +62,7 @@ export async function updateCategory(prevState: any, formData: FormData) {
       .set({
         title,
         type,
+        icon,
         description,
         userId,
         updatedAt: sql`CURRENT_TIMESTAMP`,

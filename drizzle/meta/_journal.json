@@ -1,13 +1,1 @@
-{
-  "version": "5",
-  "dialect": "sqlite",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "5",
-      "when": 1708598280110,
-      "tag": "0000_unique_sauron",
-      "breakpoints": true
-    }
-  ]
-}
+{"version":"5","dialect":"sqlite","entries":[{"idx":2,"version":"5","when":1708683488302,"tag":"0002_remarkable_shotgun","breakpoints":true}]}

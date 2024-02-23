@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "40d554bd-b543-4fa1-b6c1-0ea036b62b6d",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "b0ae6e91-524c-497c-ac6c-2aab01dcb991",
+  "prevId": "b294f692-8ea9-4996-ac62-210ba979bbcf",
   "tables": {
     "categories": {
       "name": "categories",
@@ -28,8 +28,8 @@
           "notNull": false,
           "autoincrement": false
         },
-        "iconPath": {
-          "name": "iconPath",
+        "icon": {
+          "name": "icon",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -72,6 +72,14 @@
           "notNull": false,
           "autoincrement": false,
           "default": 1
+        },
+        "isEnable": {
+          "name": "isEnable",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": true
         },
         "isDeleted": {
           "name": "isDeleted",

@@ -5,11 +5,11 @@ import { and, count, desc, eq, like, or, sql } from "drizzle-orm";
 import { SqliteError } from "better-sqlite3";
 import "dotenv";
 
-//获取分类
-export async function fetchCategories(query: string) {
+//前端获取分类
+export async function getCategories(query: string) {
   noStore();
   try {
-    const categoriesSQL =
+    const categories =
       (await db
         .select({
           id: Categories.id,
@@ -35,17 +35,62 @@ export async function fetchCategories(query: string) {
               like(Users.email, `%${query}%`),
               like(Categories.type, `${query}`)
             ),
-            eq(Categories.isDeleted, false)
+            eq(Categories.isDeleted, false),
+            eq(Categories.isEnable, true)
           )
         )
         .groupBy(Categories.id)
         .orderBy(desc(Categories.updatedAt))) || [];
 
-    const categories = categoriesSQL.map((item) => {
-      const { icon, ...rest } = item;
-      const iconUrl = `${process.env.BASE_URL}/_next/image?url=/images/categoryIcon/${icon}&w=64&q=100`;
-      return { ...rest, icon, iconUrl };
-    });
+    return {
+      code: 200,
+      msg: "获取分类成功",
+      data: { categories },
+    };
+  } catch (error: SqliteError | any) {
+    return {
+      code: 500,
+      msg: error.message,
+      data: {},
+    };
+  }
+}
+
+//后台获取分类
+export async function fetchCategories(query: string) {
+  noStore();
+  try {
+    const categories =
+      (await db
+        .select({
+          id: Categories.id,
+          type: Categories.type,
+          title: Categories.title,
+          icon: Categories.icon,
+          description: Categories.description,
+          createdAt: Categories.createdAt,
+          updatedAt: Categories.updatedAt,
+          version: Categories.version,
+          createdUser: Users.name,
+          isEnable: Categories.isEnable,
+          wordCount: count(Words.id),
+        })
+        .from(Categories)
+        .leftJoin(Users, eq(Categories.userId, Users.userId))
+        .leftJoin(Words, eq(Categories.id, Words.categoryId))
+        .where(
+          and(
+            or(
+              like(Categories.title, `%${query}%`),
+              like(Users.name, `%${query}%`),
+              like(Users.email, `%${query}%`),
+              like(Categories.type, `${query}`)
+            ),
+            eq(Categories.isDeleted, false)
+          )
+        )
+        .groupBy(Categories.id)
+        .orderBy(desc(Categories.isEnable), desc(Categories.updatedAt))) || [];
 
     return {
       code: 200,

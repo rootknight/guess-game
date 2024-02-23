@@ -42,6 +42,7 @@ export const Categories = sqliteTable("categories", {
   createdAt: integer("createdAt").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: integer("updatedAt").default(sql`CURRENT_TIMESTAMP`),
   version: integer("version").default(1),
+  isEnable: integer("isEnable", { mode: "boolean" }).default(true),
   isDeleted: integer("isDeleted", { mode: "boolean" }).default(false),
 });
 
