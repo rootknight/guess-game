@@ -1,1 +1,0 @@
-ALTER TABLE categories ADD `isEnable` integer DEFAULT true;
