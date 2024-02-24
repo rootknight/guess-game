@@ -8,7 +8,6 @@ import {
 } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 import { useDisclosure } from "@nextui-org/use-disclosure";
-import { AiOutlinePlus } from "react-icons/ai";
 import { Textarea } from "@nextui-org/input";
 import { useFormState } from "react-dom";
 import { createWord } from "@/lib/actions/createWord";
@@ -41,7 +40,11 @@ const CreateWord = ({
 
   return (
     <div>
-      <Button color="primary" endContent={<AiOutlinePlus />} onPress={onOpen}>
+      <Button
+        color="primary"
+        endContent={<div className="icon-[octicon--plus-16]" />}
+        onPress={onOpen}
+      >
         添加单词
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} backdrop="blur">

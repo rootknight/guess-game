@@ -5,12 +5,10 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-} from "@nextui-org/modal";
-import { Button } from "@nextui-org/button";
-import { useDisclosure } from "@nextui-org/use-disclosure";
-import { AiOutlinePlus } from "react-icons/ai";
-import { MdOutlineEdit } from "react-icons/md";
-import { Textarea, Input } from "@nextui-org/input";
+  Button,
+  Input,
+  useDisclosure,
+} from "@nextui-org/react";
 import { useFormState } from "react-dom";
 import { updateWord } from "@/lib/actions/updateWord";
 import { useRouter } from "next/navigation";
@@ -37,7 +35,7 @@ const UpdateWord = ({ wordId, word }: { wordId: number; word: string }) => {
   return (
     <div>
       <Button onPress={onOpen} variant="light" className="w-full h-8">
-        <MdOutlineEdit />
+        <div className="icon-[octicon--pencil-16]" />
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} backdrop="blur">
         <form action={dispatch}>

@@ -10,19 +10,13 @@ import {
   Button,
   Link,
 } from "@nextui-org/react";
-import { GoX } from "react-icons/go";
-import { useState } from "react";
 
 const QuitModal = ({ setIsEarlyEnd }: { setIsEarlyEnd: any }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <div>
       <Button onPress={onOpen} isIconOnly variant="light">
-        <GoX
-          size={16}
-          color="white"
-          className="p-2 w-8 h-8 bg-gray-400 rounded-full shadow-lg opacity-30"
-        />
+        <div className="icon-[octicon--x-16] text-white p-2 w-8 h-8 bg-gray-400 rounded-full shadow-lg opacity-30" />
       </Button>
       <Modal
         isOpen={isOpen}

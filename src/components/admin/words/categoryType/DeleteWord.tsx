@@ -5,10 +5,9 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-} from "@nextui-org/modal";
-import { Button } from "@nextui-org/button";
+  Button,
+} from "@nextui-org/react";
 import { useDisclosure } from "@nextui-org/use-disclosure";
-import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { deleteWord } from "@/lib/actions/deleteWord";
 import { useRouter } from "next/navigation";
 
@@ -21,7 +20,7 @@ const DeleteWord = ({ wordId, word }: { wordId: number; word: string }) => {
   return (
     <div>
       <Button onPress={onOpen} variant="light" className="w-full h-8">
-        <MdDeleteOutline />
+        <div className="icon-[octicon--trash-16]" />
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} backdrop="blur">
         <ModalContent>
