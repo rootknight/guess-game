@@ -16,7 +16,9 @@ const QuitModal = ({ setIsEarlyEnd }: { setIsEarlyEnd: any }) => {
   return (
     <div>
       <Button onPress={onOpen} isIconOnly variant="light">
-        <div className="icon-[octicon--x-16] text-white p-2 w-8 h-8 bg-gray-400 rounded-full shadow-lg opacity-30" />
+        <div className="p-2 w-8 h-8 bg-gray-400 rounded-full shadow-lg opacity-30">
+          <div className="icon-[octicon--x-16] text-white" />
+        </div>
       </Button>
       <Modal
         isOpen={isOpen}

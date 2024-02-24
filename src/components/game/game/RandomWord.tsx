@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import clsx from "clsx";
 import useThrottle from "@/hooks/useThrottle";
 import useCountdown from "@/hooks/useCountdown";
 import ScoreBoard from "@/components/game/game/ScoreBoard";
@@ -245,10 +244,8 @@ const RandomWord = ({
 
   return (
     <div
-      className={clsx(
-        "h-full w-full flex flex-col justify-center p-4",
-        bgColor
-      )}
+      className={`h-full w-full flex flex-col justify-center p-4
+        ${bgColor}`}
     >
       <p className="text-white text-6xl md:text-8xl text-center">{disText}</p>
       <ScoreBoard
