@@ -1,8 +1,7 @@
-import db from "@/db/index";
+import db from "@/db";
 import { unstable_noStore as noStore } from "next/cache";
 import { Users, Categories, Words, Rooms } from "@/db/schema";
 import { and, count, desc, eq, like, or, sql } from "drizzle-orm";
-import { SqliteError } from "better-sqlite3";
 import "dotenv";
 
 //前端获取分类
@@ -47,7 +46,7 @@ export async function getCategories(query: string) {
       msg: "获取分类成功",
       data: { categories },
     };
-  } catch (error: SqliteError | any) {
+  } catch (error: any) {
     return {
       code: 500,
       msg: error.message,
@@ -97,7 +96,7 @@ export async function fetchCategories(query: string) {
       msg: "获取分类成功",
       data: { categories },
     };
-  } catch (error: SqliteError | any) {
+  } catch (error: any) {
     return {
       code: 500,
       msg: error.message,
@@ -164,7 +163,7 @@ export async function fetchFilteredWords(
       msg: true,
       data: { words, resaultCount, resaultPages },
     };
-  } catch (error: SqliteError | any) {
+  } catch (error: any) {
     return {
       code: 500,
       msg: error.message,
@@ -211,7 +210,7 @@ export async function getWordsByCategory(category: string) {
       msg: true,
       data: { words, wordsCount },
     };
-  } catch (error: SqliteError | any) {
+  } catch (error: any) {
     return {
       code: 500,
       msg: error.message,
@@ -230,7 +229,7 @@ export async function fetchRooms() {
       status: 200,
       data: rooms,
     };
-  } catch (error: SqliteError | any) {
+  } catch (error: any) {
     return {
       success: false,
       status: 500,
@@ -250,7 +249,7 @@ export async function fetchUsers() {
       status: 200,
       data: users,
     };
-  } catch (error: SqliteError | any) {
+  } catch (error: any) {
     return {
       success: false,
       status: 500,

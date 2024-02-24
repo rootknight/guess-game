@@ -1,11 +1,8 @@
 "use server";
 
-import db from "@/db/index";
+import db from "@/db";
 import { Words } from "@/db/schema";
-import { SqliteError } from "better-sqlite3";
 import { z } from "zod";
-import { createInsertSchema } from "drizzle-zod";
-import { eq } from "drizzle-orm";
 
 const insertSchema = z.object({
   categoryId: z.number().min(1, { message: "未选择分类" }),
@@ -72,7 +69,7 @@ export async function createWord(prevState: any, formData: FormData) {
       code: 200,
       msg: "创建成功",
     };
-  } catch (error: SqliteError | any) {
+  } catch (error: any) {
     console.log(error.message);
     return {
       code: 401,

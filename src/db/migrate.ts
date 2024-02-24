@@ -1,15 +1,23 @@
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
-import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
+import { migrate } from "drizzle-orm/libsql/migrator";
 import dotenv from "dotenv";
 
-dotenv.config({ path: ".env.local" });
+//更改env文件路径执行不同的migrate
+const envPath = ".env.local";
+dotenv.config({ path: envPath });
 
-const betterSqlite = Database(process.env.DB_URL);
-const db = drizzle(betterSqlite);
+const { TURSO_DB_URL, TURSO_AUTH_TOKEN } = process.env;
+
+const client = createClient({
+  url: TURSO_DB_URL!,
+  authToken: TURSO_AUTH_TOKEN!,
+});
+
+const db = drizzle(client);
 
 migrate(db, {
   migrationsFolder: "drizzle",
 });
 
-betterSqlite.close();
+client.close();

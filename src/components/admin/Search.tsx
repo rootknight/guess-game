@@ -1,6 +1,5 @@
 "use client";
 import { Input } from "@nextui-org/react";
-import { AiOutlineSearch } from "react-icons/ai";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -28,7 +27,7 @@ const Search = ({ placeholder }: { placeholder?: string }) => {
         onValueChange={handleSearch}
         defaultValue={searchParames.get("query")?.toString()}
         className="w-full"
-        startContent={<AiOutlineSearch />}
+        startContent={<div className="icon-[octicon--search-16]" />}
       />
     </div>
   );

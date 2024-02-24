@@ -1,8 +1,7 @@
 "use server";
 
-import db from "@/db/index";
+import db from "@/db";
 import { Categories } from "@/db/schema";
-import { SqliteError } from "better-sqlite3";
 import { z } from "zod";
 import { createInsertSchema } from "drizzle-zod";
 import { eq } from "drizzle-orm";
@@ -65,7 +64,7 @@ export async function createCategory(prevState: any, formData: FormData) {
       code: 200,
       msg: "创建成功",
     };
-  } catch (error: SqliteError | any) {
+  } catch (error: any) {
     console.log(error.message);
     if (error.message === "UNIQUE constraint failed: categories.type") {
       return {

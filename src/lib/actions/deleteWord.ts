@@ -1,8 +1,7 @@
 "use server";
 
-import db from "@/db/index";
+import db from "@/db";
 import { Words } from "@/db/schema";
-import { SqliteError } from "better-sqlite3";
 import { eq } from "drizzle-orm";
 
 //创建分类
@@ -22,7 +21,7 @@ export async function deleteWord(wordId: number) {
       msg: "删除成功",
       data: {},
     };
-  } catch (error: SqliteError | any) {
+  } catch (error: any) {
     console.log(error.message);
     return {
       code: 400,

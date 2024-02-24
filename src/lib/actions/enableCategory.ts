@@ -1,9 +1,8 @@
 "use server";
 
-import db from "@/db/index";
+import db from "@/db";
 import { sql } from "drizzle-orm";
 import { Categories } from "@/db/schema";
-import { SqliteError } from "better-sqlite3";
 import { z } from "zod";
 import { createInsertSchema } from "drizzle-zod";
 import { eq } from "drizzle-orm";
@@ -47,7 +46,7 @@ export async function enableCategory(id: number, isEnable: boolean) {
       code: 200,
       msg: "修改成功",
     };
-  } catch (error: SqliteError | any) {
+  } catch (error: any) {
     console.log(error.message);
     return {
       code: 401,

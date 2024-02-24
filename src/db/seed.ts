@@ -1,13 +1,27 @@
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
 import * as schema from "./schema";
 import bcrypt from "bcryptjs";
 import { users, categories, words, rooms } from "./seed.json";
 import { Users, Categories, Words, Rooms } from "./schema";
+import dotenv from "dotenv";
+
+//更改env文件路径执行不同的seed
+const envPath = ".env.local";
+dotenv.config({ path: envPath });
+
+const { TURSO_DB_URL, TURSO_AUTH_TOKEN } = process.env;
+
+const client = createClient({
+  url: TURSO_DB_URL!,
+  authToken: TURSO_AUTH_TOKEN!,
+});
+
+const db = drizzle(client, { schema });
 
 const seedDev = async () => {
-  const sqlite = Database("./database/guess-game-dev.sqlite");
-  const db = drizzle(sqlite, { schema });
+  // const sqlite = Database("./database/guess-game-dev.sqlite");
+  // const db = drizzle(sqlite, { schema });
   console.log("Seed start");
   // 插入 users 数据
   for (const user of users) {
@@ -44,8 +58,8 @@ const seedDev = async () => {
 };
 
 const seedProd = async () => {
-  const sqlite = Database("./database/guess-game-prod.sqlite");
-  const db = drizzle(sqlite, { schema });
+  // const sqlite = Database("./database/guess-game-prod.sqlite");
+  // const db = drizzle(sqlite, { schema });
   console.log("Seed start");
   // 插入 users 数据
   for (const user of users) {
@@ -59,4 +73,9 @@ const seedProd = async () => {
   console.log("Seed done");
 };
 
-seedDev();
+// 执行
+if (envPath === ".env.local") {
+  seedDev();
+} else if (envPath === ".env.prod") {
+  seedProd();
+}

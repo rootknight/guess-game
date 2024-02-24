@@ -2,7 +2,6 @@
 
 import Header from "@/components/game/Header";
 import { Button, Link } from "@nextui-org/react";
-import { GoX } from "react-icons/go";
 import RecordTable from "@/components/game/records/RecordTable";
 
 function Page() {
@@ -11,7 +10,7 @@ function Page() {
       <div className=" w-full max-w-[1024px] flex flex-col gap-4">
         <Header title="游戏记录">
           <Button isIconOnly variant="shadow" as={Link} href="/">
-            <GoX size={24} color="white" />
+            <div className="icon-[octicon--x-16] text-white text-xl" />
           </Button>
         </Header>
         <RecordTable />

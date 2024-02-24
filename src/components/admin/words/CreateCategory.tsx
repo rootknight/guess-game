@@ -11,7 +11,6 @@ import {
   Image,
 } from "@nextui-org/react";
 import { useDisclosure } from "@nextui-org/use-disclosure";
-import { AiOutlinePlus } from "react-icons/ai";
 import { useFormState } from "react-dom";
 import { createCategory } from "@/lib/actions/createCategory";
 import { useRouter } from "next/navigation";
@@ -52,7 +51,11 @@ const CreateCategory = () => {
 
   return (
     <div>
-      <Button color="primary" endContent={<AiOutlinePlus />} onPress={onOpen}>
+      <Button
+        color="primary"
+        endContent={<div className="icon-[octicon--plus-16]" />}
+        onPress={onOpen}
+      >
         添加词组
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} backdrop="blur">
