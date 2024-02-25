@@ -1,6 +1,7 @@
 "use server";
 
 import db from "@/db";
+import { sql } from "drizzle-orm";
 import { Words } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
@@ -12,6 +13,7 @@ export async function deleteWord(wordId: number) {
       .update(Words)
       .set({
         isDeleted: true,
+        updatedAt: sql`(datetime('now', 'localtime'))`,
       })
       .where(eq(Words.id, Number(wordId)))
       .returning({ deletedWord: Words.word });

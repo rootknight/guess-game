@@ -44,7 +44,7 @@ export async function updateWord(prevState: any, formData: FormData) {
       .update(Words)
       .set({
         word,
-        updatedAt: sql`CURRENT_TIMESTAMP`,
+        updatedAt: sql`(datetime('now', 'localtime'))`,
       })
       .where(eq(Words.id, Number(id)));
     return {

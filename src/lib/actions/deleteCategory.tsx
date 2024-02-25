@@ -1,6 +1,7 @@
 "use server";
 
 import db from "@/db";
+import { sql } from "drizzle-orm";
 import { Categories } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
@@ -12,6 +13,7 @@ export async function deleteCategory(categoryType: string) {
       .update(Categories)
       .set({
         isDeleted: true,
+        updatedAt: sql`(datetime('now', 'localtime'))`,
       })
       .where(eq(Categories.type, `${categoryType}`));
     return {

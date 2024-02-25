@@ -19,5 +19,3 @@ const db = drizzle(client);
 migrate(db, {
   migrationsFolder: "drizzle",
 });
-
-client.close();

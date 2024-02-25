@@ -64,7 +64,7 @@ export async function updateCategory(prevState: any, formData: FormData) {
         icon,
         description,
         userId,
-        updatedAt: sql`CURRENT_TIMESTAMP`,
+        updatedAt: sql`(datetime('now', 'localtime'))`,
       })
       .where(eq(Categories.id, id || 0));
     return {

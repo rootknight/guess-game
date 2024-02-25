@@ -38,7 +38,7 @@ export async function enableCategory(id: number, isEnable: boolean) {
       .update(Categories)
       .set({
         isEnable,
-        updatedAt: sql`CURRENT_TIMESTAMP`,
+        updatedAt: sql`(datetime('now', 'localtime'))`,
       })
       .where(eq(Categories.id, Number(id)));
     console.log("修改成功");

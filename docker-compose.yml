@@ -8,3 +8,5 @@ services:
     restart: always
     ports:
       - 8089:3000
+    environment:
+      - TZ=Asia/Shanghai

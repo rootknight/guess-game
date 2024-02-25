@@ -24,8 +24,8 @@ export const Users = sqliteTable("users", {
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
   role: text("role").notNull(),
-  createdAt: integer("createdAt").default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: integer("updatedAt").default(sql`CURRENT_TIMESTAMP`),
+  createdAt: integer("createdAt").default(sql`(datetime('now', 'localtime'))`),
+  updatedAt: integer("updatedAt").default(sql`(datetime('now', 'localtime'))`),
   version: integer("version").default(1),
   isDeleted: integer("isDeleted", { mode: "boolean" }).default(false),
 });
@@ -39,8 +39,8 @@ export const Categories = sqliteTable("categories", {
   userId: text("userId")
     .notNull()
     .references(() => Users.userId),
-  createdAt: integer("createdAt").default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: integer("updatedAt").default(sql`CURRENT_TIMESTAMP`),
+  createdAt: integer("createdAt").default(sql`(datetime('now', 'localtime'))`),
+  updatedAt: integer("updatedAt").default(sql`(datetime('now', 'localtime'))`),
   version: integer("version").default(1),
   isEnable: integer("isEnable", { mode: "boolean" }).default(true),
   isDeleted: integer("isDeleted", { mode: "boolean" }).default(false),
@@ -52,8 +52,12 @@ export const Words = sqliteTable(
     id: integer("id").primaryKey({ autoIncrement: true }),
     categoryId: integer("categoryId").references(() => Categories.id),
     word: text("word").notNull(),
-    createdAt: integer("createdAt").default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: integer("updatedAt").default(sql`CURRENT_TIMESTAMP`),
+    createdAt: integer("createdAt").default(
+      sql`(datetime('now', 'localtime'))`
+    ),
+    updatedAt: integer("updatedAt").default(
+      sql`(datetime('now', 'localtime'))`
+    ),
     version: integer("version").default(1),
     isDeleted: integer("isDeleted", { mode: "boolean" }).default(false),
   },
@@ -73,11 +77,11 @@ export const Rooms = sqliteTable("rooms", {
     .notNull()
     .references(() => Categories.id),
   time: integer("time").notNull(),
-  startAt: integer("startAt").default(sql`CURRENT_TIMESTAMP`),
+  startAt: integer("startAt").default(sql`(datetime('now', 'localtime'))`),
   endAt: integer("endAt"),
   isEnd: integer("isEnd", { mode: "boolean" }),
-  createdAt: integer("createdAt").default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: integer("updatedAt").default(sql`CURRENT_TIMESTAMP`),
+  createdAt: integer("createdAt").default(sql`(datetime('now', 'localtime'))`),
+  updatedAt: integer("updatedAt").default(sql`(datetime('now', 'localtime'))`),
   version: integer("version").default(1),
   isDeleted: integer("isDeleted", { mode: "boolean" }).default(false),
 });
