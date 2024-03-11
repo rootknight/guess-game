@@ -28,7 +28,7 @@ export default function CategoryCard({
       <Card
         isPressable
         onPress={onOpen}
-        className="rounded-15 bg-transparent w-full"
+        className="bg-transparent rounded-[15px] w-full"
       >
         <CardBgSvg title={title} icon={icon} />
       </Card>

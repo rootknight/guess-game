@@ -110,7 +110,6 @@ const UpdateCategory = ({
                   aria-label="icon"
                   accept="/image/*"
                   onChange={previewImageHandler}
-                  required
                 />
               </div>
               <Textarea
