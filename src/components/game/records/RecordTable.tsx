@@ -32,7 +32,7 @@ const columns = [
 ];
 
 const RecordTable = () => {
-  const [records, setRecords] = useState();
+  const [records, setRecords] = useState<any[]>([]);
   useEffect(() => {
     const storedWords = JSON.parse(localStorage.getItem("words") || "[]");
 
@@ -63,12 +63,16 @@ const RecordTable = () => {
       aria-label="游戏记录"
       isStriped
       isHeaderSticky
-      classNames={{ wrapper: "h-[calc(100dvh-8rem)]", th: "text-base" }}
+      classNames={{
+        wrapper: "h-[calc(100dvh-8rem)]",
+        th: "text-base",
+        base: "max-h-[calc(100dvh-8rem)]",
+      }}
     >
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
-      <TableBody items={records || []} emptyContent={"没有记录"}>
+      <TableBody items={records} emptyContent={"没有记录"}>
         {(item: any) => (
           <TableRow key={item.gameTime}>
             {(columnKey) => (
