@@ -1,12 +1,11 @@
 "use client";
 
 import { Button, Input, Link } from "@heroui/react";
-import { useState } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useState, useActionState } from "react";
 import { authenticate } from "@/lib/actions/authenticate";
 
 const LoginForm = () => {
-  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+  const [errorMessage, dispatch] = useActionState(authenticate, undefined);
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
 

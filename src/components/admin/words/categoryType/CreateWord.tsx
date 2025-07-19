@@ -9,10 +9,9 @@ import {
   Textarea,
   useDisclosure,
 } from "@heroui/react";
-import { useFormState } from "react-dom";
 import { createWord } from "@/lib/actions/createWord";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useActionState } from "react";
 
 const CreateWord = ({
   categoryId,
@@ -27,7 +26,7 @@ const CreateWord = ({
     msg: string;
   } | null = null;
   const userId = "b0edb5f4-df84-46bc-9503-de9d1974b8e9";
-  const [state, dispatch] = useFormState(createWord, initialState);
+  const [state, dispatch] = useActionState(createWord, initialState);
   const router = useRouter();
 
   useEffect(() => {

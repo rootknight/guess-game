@@ -57,7 +57,7 @@ function Page() {
             <p className="py-4 bg-gray-700 rounded-t-xl text-center text-xl">
               跳过：{skipWords?.length || 0}
             </p>
-            <div className="line-through h-[calc(100dvh-16rem)] flex flex-col items-center overflow-y-auto p-4 rounded-b-xl bg-gray-500">
+            <div className="h-[calc(100dvh-16rem)] flex flex-col items-center overflow-y-auto p-4 rounded-b-xl bg-gray-500">
               {skipWords?.map((item: any, index: any) => (
                 <p key={index}>{item}</p>
               ))}

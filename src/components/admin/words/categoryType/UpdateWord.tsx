@@ -9,10 +9,9 @@ import {
   Input,
   useDisclosure,
 } from "@heroui/react";
-import { useFormState } from "react-dom";
 import { updateWord } from "@/lib/actions/updateWord";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useActionState } from "react";
 
 const UpdateWord = ({ wordId, word }: { wordId: number; word: string }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -21,7 +20,7 @@ const UpdateWord = ({ wordId, word }: { wordId: number; word: string }) => {
     msg: string;
   } | null = null;
   const userId = "b0edb5f4-df84-46bc-9503-de9d1974b8e9";
-  const [state, dispatch] = useFormState(updateWord, initialState);
+  const [state, dispatch] = useActionState(updateWord, initialState);
   const router = useRouter();
 
   useEffect(() => {
