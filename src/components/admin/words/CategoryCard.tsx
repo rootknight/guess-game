@@ -7,7 +7,7 @@ import {
   Link,
   Button,
   Switch,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import UpdateCategory from "@/components/admin/words/UpdateCategory";
 import CardBgSvg from "@/components/CardBgSvg";
 import { enableCategory } from "@/lib/actions/enableCategory";

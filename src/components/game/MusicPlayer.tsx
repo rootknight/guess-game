@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { Switch } from "@nextui-org/switch";
+import { Switch } from "@heroui/react";
 
 const MusicPlayer = () => {
   const [isAllowPlay, setIsAllowPlay] = useState<boolean>(false);

@@ -8,7 +8,7 @@ import {
   Button,
   Input,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useFormState } from "react-dom";
 import { updateWord } from "@/lib/actions/updateWord";
 import { useRouter } from "next/navigation";

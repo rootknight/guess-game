@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import useThrottle from "@/hooks/useThrottle";
 import useCountdown from "@/hooks/useCountdown";
 import ScoreBoard from "@/components/game/game/ScoreBoard";
-import dayjs from "dayjs";
+import { getTimestamp, isWithinHours } from "@/lib/utils/dateUtils";
 
 const RandomWord = ({
   type,
@@ -44,9 +44,8 @@ const RandomWord = ({
   useEffect(() => {
     const storedWordsJSON = localStorage.getItem("words");
     const storedWords = JSON.parse(storedWordsJSON || "[]");
-    const nowUNIX = dayjs().valueOf();
     const filteredWords = storedWords.filter(
-      (item: any) => nowUNIX - item.endTime < 3600000
+      (item: any) => !isWithinHours(item.endTime, 1)
     );
     const last1HourWords = filteredWords.reduce((result: any[], item: any) => {
       result.push(...item.successWords, ...item.skipWords);

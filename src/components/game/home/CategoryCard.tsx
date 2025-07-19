@@ -6,8 +6,9 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
-} from "@nextui-org/react";
-import { useDisclosure } from "@nextui-org/use-disclosure";
+  useDisclosure,
+} from "@heroui/react";
+
 import SelectTime from "@/components/game/SelectTime";
 import CardBgSvg from "@/components/CardBgSvg";
 

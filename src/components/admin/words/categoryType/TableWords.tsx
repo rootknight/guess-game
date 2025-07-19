@@ -9,7 +9,7 @@ import {
   Pagination,
   Select,
   SelectItem,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import DeleteWord from "@/components/admin/words/categoryType/DeleteWord";
@@ -52,7 +52,7 @@ export default function TableWords({
   const [pageSize, setPageSize] = useState("10");
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
     params.set("page", page);
     params.set("pageSize", pageSize);
     replace(`${pathname}?${params.toString()}`);

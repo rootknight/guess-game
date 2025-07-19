@@ -5,10 +5,10 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-} from "@nextui-org/modal";
-import { Button } from "@nextui-org/button";
-import { useDisclosure } from "@nextui-org/use-disclosure";
-import { Textarea } from "@nextui-org/input";
+  Button,
+  Textarea,
+  useDisclosure,
+} from "@heroui/react";
 import { useFormState } from "react-dom";
 import { createWord } from "@/lib/actions/createWord";
 import { useRouter } from "next/navigation";

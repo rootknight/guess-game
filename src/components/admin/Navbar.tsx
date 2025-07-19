@@ -7,8 +7,9 @@ import {
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
-} from "@nextui-org/navbar";
-import { Link, Button } from "@nextui-org/react";
+  Button,
+  Link,
+} from "@heroui/react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { signout } from "@/lib/actions/authenticate";

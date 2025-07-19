@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Progress } from "@nextui-org/progress";
+import { Progress } from "@heroui/react";
 
 function CountDown({
   time,

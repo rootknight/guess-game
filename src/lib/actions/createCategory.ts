@@ -3,10 +3,9 @@
 import db from "@/db";
 import { Categories } from "@/db/schema";
 import { z } from "zod";
-import { createInsertSchema } from "drizzle-zod";
 import { eq } from "drizzle-orm";
 
-const insertSchema = createInsertSchema(Categories, {
+const insertSchema = z.object({
   title: z
     .string()
     .min(2, { message: "至少包含两个字符" })

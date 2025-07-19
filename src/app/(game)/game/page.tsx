@@ -4,14 +4,15 @@ import GameBoard from "@/components/game/game/GameBoard";
 async function Page({
   searchParams,
 }: {
-  searchParams?: {
+  searchParams?: Promise<{
     type?: string;
     time?: number;
-  };
+  }>;
 }) {
   //根据当前searchParams获取对应的类型和时间
-  const type = searchParams?.type || "random";
-  const time = searchParams?.time || 60;
+  const resolvedSearchParams = await searchParams;
+  const type = resolvedSearchParams?.type || "random";
+  const time = resolvedSearchParams?.time || 60;
   const { code, msg, data } = await getWordsByCategory(type);
   const resault = data.words || [];
   const categoryTitle = resault[0]?.categoryTitle || "";

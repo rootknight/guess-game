@@ -12,17 +12,20 @@ const Page = async ({
   params,
   searchParams,
 }: {
-  params: { categoryType: string };
-  searchParams?: {
+  params: Promise<{ categoryType: string }>;
+  searchParams?: Promise<{
     query?: string;
     page?: string;
     pageSize?: number;
-  };
+  }>;
 }) => {
-  const query = searchParams?.query || "";
-  const currentPage = Number(searchParams?.page) || 1;
-  const pageSize = Number(searchParams?.pageSize) || 10;
-  const category = params.categoryType;
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+
+  const query = resolvedSearchParams?.query || "";
+  const currentPage = Number(resolvedSearchParams?.page) || 1;
+  const pageSize = Number(resolvedSearchParams?.pageSize) || 10;
+  const category = resolvedParams.categoryType;
   const WordsResault = await fetchFilteredWords(
     query,
     category,

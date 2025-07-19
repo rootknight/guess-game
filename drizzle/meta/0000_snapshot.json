@@ -1,8 +1,6 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
-  "id": "9025f101-cca7-4009-9b51-57b2eb63273c",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "categories": {
       "name": "categories",
@@ -103,19 +101,20 @@
         "categories_userId_users_id_fk": {
           "name": "categories_userId_users_id_fk",
           "tableFrom": "categories",
-          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     },
     "rooms": {
       "name": "rooms",
@@ -208,32 +207,33 @@
         "rooms_userId_users_id_fk": {
           "name": "rooms_userId_users_id_fk",
           "tableFrom": "rooms",
-          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "rooms_categoryId_categories_id_fk": {
           "name": "rooms_categoryId_categories_id_fk",
           "tableFrom": "rooms",
-          "tableTo": "categories",
           "columnsFrom": [
             "categoryId"
           ],
+          "tableTo": "categories",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     },
     "users": {
       "name": "users",
@@ -317,7 +317,8 @@
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     },
     "words": {
       "name": "words",
@@ -390,25 +391,28 @@
         "words_categoryId_categories_id_fk": {
           "name": "words_categoryId_categories_id_fk",
           "tableFrom": "words",
-          "tableTo": "categories",
           "columnsFrom": [
             "categoryId"
           ],
+          "tableTo": "categories",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "checkConstraints": {}
     }
   },
   "enums": {},
   "_meta": {
-    "schemas": {},
     "tables": {},
     "columns": {}
-  }
+  },
+  "id": "9025f101-cca7-4009-9b51-57b2eb63273c",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "views": {}
 }

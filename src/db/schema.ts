@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { text, integer, sqliteTable, unique } from "drizzle-orm/sqlite-core";
-import { v4 as uuidv4 } from "uuid";
+import { generateUUID } from "@/lib/utils/idUtils";
 
 // 生成不重复的6位大写字母数字作为roomId
 function generateUniqueId() {
@@ -19,7 +19,7 @@ function generateUniqueId() {
 export const Users = sqliteTable("users", {
   userId: text("id")
     .primaryKey()
-    .$defaultFn(() => uuidv4()),
+    .$defaultFn(() => generateUUID()),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),

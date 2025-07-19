@@ -8,9 +8,9 @@ import {
   TableRow,
   TableCell,
   getKeyValue,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
+import { formatDate } from "@/lib/utils/dateUtils";
 
 const columns = [
   {
@@ -51,7 +51,7 @@ const RecordTable = () => {
             endTime: string;
           }) => {
             const score = successWords ? successWords.length : 0;
-            const gameTime = dayjs(endTime).format("YYYY-MM-DD HH:mm:ss");
+            const gameTime = formatDate(endTime);
             return { title, time, score, gameTime };
           }
         ) || []

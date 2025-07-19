@@ -1,4 +1,4 @@
-import { nextui } from "@nextui-org/react";
+import { heroui } from "@heroui/react";
 import type { Config } from "tailwindcss";
 const { addDynamicIconSelectors } = require("@iconify/tailwind");
 
@@ -7,7 +7,7 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -19,6 +19,6 @@ const config: Config = {
     },
   },
   darkMode: "class",
-  plugins: [nextui(), addDynamicIconSelectors()],
+  plugins: [heroui(), addDynamicIconSelectors()],
 };
 export default config;

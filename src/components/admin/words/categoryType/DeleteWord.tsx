@@ -6,8 +6,8 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-} from "@nextui-org/react";
-import { useDisclosure } from "@nextui-org/use-disclosure";
+  useDisclosure,
+} from "@heroui/react";
 import { deleteWord } from "@/lib/actions/deleteWord";
 import { useRouter } from "next/navigation";
 

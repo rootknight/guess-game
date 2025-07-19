@@ -1,7 +1,7 @@
 "use client";
 
 import Header from "@/components/game/Header";
-import { Button, Link } from "@nextui-org/react";
+import { Button, Link } from "@heroui/react";
 import RecordTable from "@/components/game/records/RecordTable";
 
 function Page() {

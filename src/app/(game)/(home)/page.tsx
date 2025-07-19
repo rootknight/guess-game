@@ -1,8 +1,7 @@
 import CategoryCard from "@/components/game/home/CategoryCard";
 import { getCategories } from "@/lib/fetchers/data";
 import Header from "@/components/game/Header";
-import { Button } from "@nextui-org/button";
-import { Link } from "@nextui-org/link";
+import { Button, Link } from "@heroui/react";
 
 export default async function Page() {
   const { code, msg, data } = await getCategories("");

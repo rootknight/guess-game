@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input, Link } from "@nextui-org/react";
+import { Button, Input, Link } from "@heroui/react";
 import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { authenticate } from "@/lib/actions/authenticate";

@@ -10,7 +10,7 @@ import {
   Radio,
   Button,
   Link,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useState } from "react";
 
 const SelectTime = ({

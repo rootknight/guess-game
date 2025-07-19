@@ -11,11 +11,12 @@ export const metadata = {
 const Page = async ({
   searchParams,
 }: {
-  searchParams?: {
+  searchParams?: Promise<{
     query?: string;
-  };
+  }>;
 }) => {
-  const query = searchParams?.query || "";
+  const resolvedSearchParams = await searchParams;
+  const query = resolvedSearchParams?.query || "";
   const { code, msg, data } = await fetchCategories(query);
   const categories = data?.categories || [];
 

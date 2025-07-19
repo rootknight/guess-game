@@ -4,10 +4,9 @@ import db from "@/db";
 import { sql } from "drizzle-orm";
 import { Words } from "@/db/schema";
 import { z } from "zod";
-import { createInsertSchema } from "drizzle-zod";
 import { eq } from "drizzle-orm";
 
-const insertSchema = createInsertSchema(Words, {
+const insertSchema = z.object({
   id: z.number().min(1, { message: "未选择单词" }),
   word: z
     .string()

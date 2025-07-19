@@ -1,14 +1,14 @@
 "use client";
-import { Input } from "@nextui-org/react";
+import { Input } from "@heroui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useDebouncedCallback } from "use-debounce";
+import { useDebouncedCallback } from "@/hooks/useDebounce";
 
 const Search = ({ placeholder }: { placeholder?: string }) => {
   const searchParames = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
   const handleSearch = useDebouncedCallback((value: string) => {
-    const params = new URLSearchParams(searchParames);
+    const params = new URLSearchParams(searchParames.toString());
     params.set("page", "1");
     if (value) {
       params.set("query", value);

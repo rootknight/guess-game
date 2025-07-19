@@ -2,7 +2,7 @@
 "use client";
 
 import SelectTime from "@/components/game/SelectTime";
-import { Button, useDisclosure, Link } from "@nextui-org/react";
+import { Button, useDisclosure, Link } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 

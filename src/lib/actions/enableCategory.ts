@@ -4,10 +4,9 @@ import db from "@/db";
 import { sql } from "drizzle-orm";
 import { Categories } from "@/db/schema";
 import { z } from "zod";
-import { createInsertSchema } from "drizzle-zod";
 import { eq } from "drizzle-orm";
 
-const insertSchema = createInsertSchema(Categories, {
+const insertSchema = z.object({
   id: z.number(),
   isEnable: z.boolean(),
 });

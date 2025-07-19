@@ -9,7 +9,7 @@ import {
   useDisclosure,
   Button,
   Link,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 const QuitModal = ({ setIsEarlyEnd }: { setIsEarlyEnd: any }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

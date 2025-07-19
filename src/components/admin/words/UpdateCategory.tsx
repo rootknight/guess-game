@@ -9,9 +9,9 @@ import {
   Input,
   Textarea,
   Image,
-} from "@nextui-org/react";
-import { useDisclosure } from "@nextui-org/use-disclosure";
-import { useFormState } from "react-dom";
+  useDisclosure,
+} from "@heroui/react";
+import { useActionState } from "react";
 import { updateCategory } from "@/lib/actions/updateCategory";
 import { deleteCategory } from "@/lib/actions/deleteCategory";
 import { useRouter } from "next/navigation";
@@ -36,7 +36,7 @@ const UpdateCategory = ({
     msg: string;
   } | null = null;
   const userId = "b0edb5f4-df84-46bc-9503-de9d1974b8e9";
-  const [state, dispatch] = useFormState(updateCategory, initialState);
+  const [state, dispatch] = useActionState(updateCategory, initialState);
   const router = useRouter();
   const [previewImage, setPreviewImage] = useState(icon);
 
